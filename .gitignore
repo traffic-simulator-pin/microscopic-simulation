@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/java,eclipse,netbeans,intellij
 # Edit at https://www.gitignore.io/?templates=java,eclipse,netbeans,intellij
 
@@ -181,7 +180,11 @@ hs_err_pid*
 **/nbproject/Makefile-*.mk
 **/nbproject/Package-*.bash
 build/
+nbproject/
 nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### Project files ###
+simulacoes/*
