@@ -186,3 +186,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### Project files ###
+simulacoes/*
