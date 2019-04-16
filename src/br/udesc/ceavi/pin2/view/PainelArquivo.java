@@ -111,7 +111,7 @@ public class PainelArquivo extends JPanel implements ObservadorInicial{
      * {@inheritdoc}
      */
     public void erroGeracaoRede(LogException ex) {
-        this.arquivoAtual.setText("Arquivo apresentou erros, favor selecione outro arquivo.");
+        this.arquivoAtual.setText("Houve um erro na criação da rede. Consulte a documentação.");
         this.botaoBuscar.setEnabled(true);
     }
     

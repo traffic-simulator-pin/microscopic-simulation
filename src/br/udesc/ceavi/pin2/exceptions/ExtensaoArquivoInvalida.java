@@ -27,7 +27,7 @@ public class ExtensaoArquivoInvalida extends Exception{
      * {@inheritdoc}
      */
     public String getMessage() {
-        return "A extensão do arquivo (." + this.extensaoOriginal + ") é inválida, apenas são aceitos arquivos " + Arrays.toString(extensaoValida) + ".";
+        return "A extensão do arquivo (." + this.extensaoOriginal + ") é inválida, são aceitos arquivos " + Arrays.toString(extensaoValida) + ".";
     }
     
 }
