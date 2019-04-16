@@ -2,7 +2,7 @@ package br.udesc.ceavi.pin2.control;
 
 /**
  * Fábrica para criação de comandos para execução.
- * @author jpedroschmitz
+ * @author João Pedro Schmitz
  */
 public abstract class ShellCommand {
     

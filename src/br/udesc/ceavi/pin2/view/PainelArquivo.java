@@ -114,5 +114,11 @@ public class PainelArquivo extends JPanel implements ObservadorInicial{
         this.arquivoAtual.setText("Houve um erro na criação da rede. Consulte a documentação.");
         this.botaoBuscar.setEnabled(true);
     }
+
+    @Override
+    public void erroGeracaoDeArquivoDePOI(LogException ex) {
+        this.arquivoAtual.setText("Houve um erro na geração de arquivo de POI da rede.");
+        this.botaoBuscar.setEnabled(true);
+    }
     
 }

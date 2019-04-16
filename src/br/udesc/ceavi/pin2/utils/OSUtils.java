@@ -2,7 +2,7 @@ package br.udesc.ceavi.pin2.utils;
 
 /**
  *
- * @author Módulo 4
+ * @author João Pedro Schmitz
  */
 public class OSUtils {
 

@@ -63,15 +63,7 @@ public class ControleInicial implements IControleInicial, ShellListener {
         SimulacaoMicroscopica.getInstance().log("Iniciando processo de simulação.");
         this.criaPastaTemporariaArquivo();
         this.criaRedeTrafego();
-        // Etapas 
-        // OK - Criar pasta para salvar os arquivos da simulação
-        // OK - Pegar arquivo OSM e converter para .net.xml
-        // Limpar arquivo .net.xml removendo o desnecessário
-        // Especificar informações que estão faltando, como velocidades máxima das ruas
-        // Iniciar o SUMO
-        // -> Definir o trafégo aleatoriamente
-        // Criar arquivo example.sumocfg
-        // Chamar pelo terminal sumo-gui -c example.sumocfg
+        this.criarArquivoDePOI();
     }
 
     /**
@@ -97,19 +89,20 @@ public class ControleInicial implements IControleInicial, ShellListener {
         SimulacaoMicroscopica.getInstance().log("Iniciando geração da rede de tráfego.");
         this.notificaInicioGeracaoRede();
         Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
-             "netconvert --osm " + this.arquivoSimulacao.getAbsolutePath() + " -o " + SimulacaoMicroscopica.getInstance().getWorkspaceFolder() + "/rede.net.xml"
-            ,SimulacaoMicroscopica.getInstance().getOperatingSystem().isWindows() ? "dir" : "ls"
+             "netconvert --osm-files " + this.arquivoSimulacao.getAbsolutePath() + " --geometry.remove --roundabouts.guess --ramps.guess --junctions.join --tls.guess-signals --tls.discard-simple --tls.join -o " + SimulacaoMicroscopica.getInstance().getWorkspaceFolder() + "/rede.net.xml",
+             SimulacaoMicroscopica.getInstance().getOperatingSystem().isWindows() ? "dir" : "ls"
         );
         terminal.start();
     }
-
-    /**
-     * Notifica os observadores que a rede está sendo carregada.
-     */
-    private void notificaInicioGeracaoRede() {
-        this.observadores.forEach((observador) -> {
-            observador.inicioGeracaoRede();
-        });
+    
+    private void criarArquivoDePOI() {
+        SimulacaoMicroscopica.getInstance().log("Iniciando geração de arquivo de pontos de interesse.");
+        File polygonUtil = new File("src/br/udesc/ceavi/pin2/utils/osmPolyconvert.typ.xml");
+        Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
+             "polyconvert --net-file " + this.arquivoSimulacao.getAbsolutePath() + " --osm-files " + this.arquivoSimulacao.getAbsolutePath() + " --type-file " + polygonUtil.getAbsolutePath() + " -o " + SimulacaoMicroscopica.getInstance().getWorkspaceFolder() + "/poi.net.xml",
+             SimulacaoMicroscopica.getInstance().getOperatingSystem().isWindows() ? "dir" : "ls"
+        );
+        terminal.start();
     }
 
     @Override
@@ -125,6 +118,15 @@ public class ControleInicial implements IControleInicial, ShellListener {
     public void onCommandException(ErroExecucaoCommando ex) {
         SwingUtilities.invokeLater(() -> {
             this.notificaErroGeracaoRede(ex);
+        });
+    }
+    
+    /**
+     * Notifica os observadores que a rede está sendo carregada.
+     */
+    private void notificaInicioGeracaoRede() {
+        this.observadores.forEach((observador) -> {
+            observador.inicioGeracaoRede();
         });
     }
 
@@ -145,6 +147,16 @@ public class ControleInicial implements IControleInicial, ShellListener {
             observador.erroGeracaoRede(ex);
         });
     }
+    
+     /**
+     * Notifica os observadores erros na geração de arquivo POI
+     */
+    private void notificaErroGeracaoDeArquivoDePOI(LogException ex) {
+        this.observadores.forEach((observador) -> {
+            observador.erroGeracaoDeArquivoDePOI(ex);
+        });
+    }
+    
 
     @Override
     /**

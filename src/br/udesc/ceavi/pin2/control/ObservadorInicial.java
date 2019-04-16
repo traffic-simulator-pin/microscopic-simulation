@@ -5,7 +5,7 @@ import java.io.File;
 
 /**
  * Interface para observadores relacionados a inicialização da simulação.
- * @author Jeferson Penz
+ * @author Jeferson Penz, João Pedro Schmitz
  */
 public interface ObservadorInicial {
     
@@ -30,5 +30,11 @@ public interface ObservadorInicial {
      * @param ex
      */
     public void erroGeracaoRede(LogException ex);
+    
+    /**
+     * Indica um erro na geração do arquivo de POI na rede;
+     * @param ex
+     */
+    public void erroGeracaoDeArquivoDePOI(LogException ex);
     
 }

@@ -94,5 +94,12 @@ public class PainelInicial extends JPanel implements ObservadorInicial{
         JOptionPane.showMessageDialog(this, "Houve um erro ao iniciar a simulação:\n" + ex.getMessage());
         this.painelAcoes.desabilitaAcao("iniciar");
     }
+
+    @Override
+    public void erroGeracaoDeArquivoDePOI(LogException ex) {
+        ex.generateLog();
+        JOptionPane.showMessageDialog(this, "Houve um erro ao criar um arquivo da simulação:\n" + ex.getMessage());
+        this.painelAcoes.desabilitaAcao("iniciar");
+    }
     
 }
