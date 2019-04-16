@@ -36,11 +36,10 @@ public class ShellWindows extends Shell {
             });
 
             int exitVal = process.waitFor();
-            if (exitVal == 0) {
-                return output.toString();
-            } else {
+            if (exitVal != 0) {
                 throw new ErroExecucaoCommando(comando, new IllegalStateException("O retorno da aplicação(" + exitVal + ") é inválido:\n" + output.toString()));
             }
+            return output.toString();
         } catch (IOException | InterruptedException ex) {
             throw new ErroExecucaoCommando(comando, ex);
         }

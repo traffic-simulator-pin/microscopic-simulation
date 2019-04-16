@@ -36,7 +36,7 @@ public class ShellLinux extends Shell {
             });
 
             int exitVal = process.waitFor();
-            if (exitVal == 0) {
+            if (exitVal != 0) {
                 throw new ErroExecucaoCommando(comando, new Exception(output.toString()));
             }
             return output.toString();
