@@ -1,6 +1,10 @@
 package br.udesc.ceavi.pin2;
 
 import br.udesc.ceavi.pin2.control.IControleSimulacao;
+import br.udesc.ceavi.pin2.control.ShellCommand;
+import br.udesc.ceavi.pin2.control.ShellCommandLinux;
+import br.udesc.ceavi.pin2.control.ShellCommandWindows;
+import br.udesc.ceavi.pin2.utils.OSUtils;
 import br.udesc.ceavi.pin2.view.FrameDetalhes;
 import br.udesc.ceavi.pin2.view.FramePrincipal;
 import java.awt.Color;
@@ -15,12 +19,14 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class SimulacaoMicroscopica {
     
     public static final String NOME_APLICACAO = "Simulação Microscópica - Projeto Integrador";
-    public static final String EXTENSAO_ARQUIVO = "xml";
+    public static final String EXTENSAO_ARQUIVO = "osm";
     public static final String FORMATO_DATA = "yyyy.MM.dd.HH.mm.ss";
     public static final Color  COR_FUNDO      = new Color(245, 245, 245);
     public static final Color  COR_BORDA      = new Color(190, 190, 190);
     public static final Color  COR_SEPARADOR  = new Color(200, 200, 200);
     
+    private static final OSUtils OPERATING_SYSTEM = new OSUtils();
+    private String workspaceFolder;
     private FramePrincipal frameAplicacao;
     private FrameDetalhes  frameDetalhes;
     
@@ -83,6 +89,30 @@ public class SimulacaoMicroscopica {
     public void ocultaDetalhes(){
         this.frameDetalhes.setVisible(false);
     }
+
+    public String getWorkspaceFolder() {
+        return workspaceFolder;
+    }
+
+    public void setWorkspaceFolder(String workspaceFolder) {
+        this.workspaceFolder = workspaceFolder;
+    }
+
+    public static OSUtils getOPERATING_SYSTEM() {
+        return OPERATING_SYSTEM;
+    }
+    
+    public static ShellCommand getShellCommand() {
+        if (OPERATING_SYSTEM.isUnix()) {
+            return new ShellCommandLinux();
+        } else if (OPERATING_SYSTEM.isWindows()) {
+            return new ShellCommandWindows();
+        } else {
+            // TODO, show message not supported
+            return null;
+        }
+    }
+    
     
     /**
      * Método para inicialização da aplicação.

@@ -2,6 +2,7 @@ package br.udesc.ceavi.pin2.control;
 
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.exceptions.ExtensaoArquivoInvalida;
+import br.udesc.ceavi.pin2.utils.OSUtils;
 import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -17,7 +18,7 @@ import org.apache.commons.io.FilenameUtils;
 public class ControleInicial implements IControleInicial {
 
     // Modelo de simulação carregado do arquivo.
-    private Object modeloSimulacao;
+    private File arquivoSimulacao;
 
     private final List<ObservadorInicial> observadores;
 
@@ -47,13 +48,20 @@ public class ControleInicial implements IControleInicial {
      * @param file
      */
     private void processaArquivo(File file) {
-        // TODO - Processar arquivo para dar início na simulação
+        this.arquivoSimulacao = file;
     }
 
     private boolean criaPastaParaSalvarArquivos() {
         SimpleDateFormat sdf = new SimpleDateFormat(SimulacaoMicroscopica.FORMATO_DATA);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        return new File("simulacoes/resultados/" + sdf.format(timestamp)).mkdirs();
+        File file = new File("simulacoes/resultados/" + sdf.format(timestamp));
+        if (file.mkdirs()) {
+            SimulacaoMicroscopica.getInstance().setWorkspaceFolder("simulacoes/resultados/" + sdf.format(timestamp));
+            return true;
+        } else {
+            // TODO, criar execeção
+            return false;
+        }
     }
 
     /**
@@ -73,16 +81,21 @@ public class ControleInicial implements IControleInicial {
         SimulacaoMicroscopica.getInstance().iniciaSimulacao(null, null);
         
         this.criaPastaParaSalvarArquivos();
-        
+        this.criaRedeDeTrafego();
         // Etapas 
         // OK - Criar pasta para salvar os arquivos da simulação
-        // Pegar arquivo OSM e converter para .net.xml
+        // OK - Pegar arquivo OSM e converter para .net.xml
         // Limpar arquivo .net.xml removendo o desnecessário
         // Especificar informações que estão faltando, como velocidades máxima das ruas
         // Iniciar o SUMO
-        // Definir o trafégo aleatoriamente
+        // -> Definir o trafégo aleatoriamente
         // Criar arquivo example.sumocfg
         // Chamar pelo terminal sumo-gui -c example.sumocfg
+    }
+    
+    public void criaRedeDeTrafego() {
+        Shell terminal = SimulacaoMicroscopica.getShellCommand().getNewShell("netconvert --osm " + this.arquivoSimulacao.getAbsolutePath() + " -o " + SimulacaoMicroscopica.getInstance().getWorkspaceFolder() + "/rede.net.xml");
+        System.out.println(terminal.runShell());
     }
 
     @Override
