@@ -1,8 +1,6 @@
 package br.udesc.ceavi.pin2.control;
 
 import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Shell para execução dos comandos.

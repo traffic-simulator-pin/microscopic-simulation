@@ -1,6 +1,5 @@
 package br.udesc.ceavi.pin2.exceptions;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**

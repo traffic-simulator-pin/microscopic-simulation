@@ -1,7 +1,5 @@
 package br.udesc.ceavi.pin2.control;
 
-import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
-
 /**
  * Controle para gerenciamento dos detalhes da simulação.
  * @author Jeferson Penz

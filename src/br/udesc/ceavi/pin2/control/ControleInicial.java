@@ -5,7 +5,6 @@ import br.udesc.ceavi.pin2.exceptions.ErroCriacaoDiretorio;
 import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
 import br.udesc.ceavi.pin2.exceptions.ExtensaoArquivoInvalida;
 import br.udesc.ceavi.pin2.exceptions.LogException;
-import br.udesc.ceavi.pin2.utils.OSUtils;
 import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
