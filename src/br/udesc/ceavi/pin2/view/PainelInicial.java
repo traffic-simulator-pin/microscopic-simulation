@@ -4,10 +4,12 @@ import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.control.ControleInicial;
 import br.udesc.ceavi.pin2.control.IControleInicial;
 import br.udesc.ceavi.pin2.control.ObservadorInicial;
+import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -16,10 +18,10 @@ import javax.swing.JPanel;
  */
 public class PainelInicial extends JPanel implements ObservadorInicial{
     
-    private IControleInicial controller;
-    private JPanel           painelArquivo;
-    private JPanel           painelConfig;
-    private PainelAcoes      painelAcoes;
+    private IControleInicial    controller;
+    private JPanel              painelArquivo;
+    private PainelConfiguracoes painelConfig;
+    private PainelAcoes         painelAcoes;
     
     /**
      * Cria um novo painel inicial para a aplicação.
@@ -47,7 +49,12 @@ public class PainelInicial extends JPanel implements ObservadorInicial{
         this.painelConfig  = new PainelConfiguracoes();
         this.painelAcoes   = new PainelAcoes();
         this.painelAcoes.adicionaAcao("iniciar", "Iniciar Simulação", (ActionEvent e) -> {
-            this.controller.iniciaSimulacao();
+            try {
+                this.controller.iniciaSimulacao();
+            } catch(LogException ex){
+                ex.generateLog();
+                JOptionPane.showMessageDialog(this, "Houve um erro ao iniciar a simulação:\n" + ex.getMessage());
+            }
         });
         this.painelAcoes.desabilitaAcao("iniciar");
         this.add(painelArquivo, BorderLayout.NORTH);
@@ -61,6 +68,31 @@ public class PainelInicial extends JPanel implements ObservadorInicial{
      */
     public void arquivoCarregado(File arquivo) {
         this.painelAcoes.habilitaAcao("iniciar");
+    }
+
+    @Override
+    /**
+     * {@inheritdoc}
+     */
+    public void inicioGeracaoRede() {
+        this.painelConfig.desabilitaConfiguracoes();
+        this.painelAcoes.desabilitaAcao("iniciar");
+    }
+
+    @Override
+    /**
+     * {@inheritdoc}
+     */
+    public void sucessoGeracaoRede() {}
+
+    @Override
+    /**
+     * {@inheritdoc}
+     */
+    public void erroGeracaoRede(LogException ex) {
+        ex.generateLog();
+        JOptionPane.showMessageDialog(this, "Houve um erro ao iniciar a simulação:\n" + ex.getMessage());
+        this.painelAcoes.desabilitaAcao("iniciar");
     }
     
 }

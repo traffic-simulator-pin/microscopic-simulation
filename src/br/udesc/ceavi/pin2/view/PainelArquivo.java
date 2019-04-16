@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import br.udesc.ceavi.pin2.control.IControleInicial;
 import br.udesc.ceavi.pin2.control.ObservadorInicial;
+import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.awt.Font;
 
 /**
@@ -88,6 +89,30 @@ public class PainelArquivo extends JPanel implements ObservadorInicial{
      */
     public void arquivoCarregado(File arquivo) {
         this.arquivoAtual.setText(arquivo.getName());
+    }
+
+    @Override
+    /**
+     * {@inheritdoc}
+     */
+    public void inicioGeracaoRede() {
+        this.arquivoAtual.setText("Criando Rede.");
+        this.botaoBuscar.setEnabled(false);
+    }
+
+    @Override
+    /**
+     * {@inheritdoc}
+     */
+    public void sucessoGeracaoRede() {}
+
+    @Override
+    /**
+     * {@inheritdoc}
+     */
+    public void erroGeracaoRede(LogException ex) {
+        this.arquivoAtual.setText("Arquivo apresentou erros, favor selecione outro arquivo.");
+        this.botaoBuscar.setEnabled(true);
     }
     
 }

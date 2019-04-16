@@ -4,6 +4,9 @@ import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -16,6 +19,8 @@ import javax.swing.JPanel;
  * @author Jeferson Penz
  */
 public class PainelConfiguracoes extends JPanel{
+    
+    private List<JComponent> configuracoes;
 
     /**
      * Cria um novo painel para realizar a configuracao dos dados da simulação.
@@ -30,6 +35,7 @@ public class PainelConfiguracoes extends JPanel{
      * Realiza a inicialização das propriedades do painel.
      */
     private void iniciaPropriedades() {
+        this.configuracoes = new ArrayList<>();
         this.setBackground(SimulacaoMicroscopica.COR_FUNDO);
         this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(2, 0, 2, 0, SimulacaoMicroscopica.COR_BORDA),
                                                           BorderFactory.createEmptyBorder(10, 10, 10, 10)));
@@ -68,6 +74,7 @@ public class PainelConfiguracoes extends JPanel{
      * @return 
      */
     private JPanel criaPainelConfiguracao(String label, JComponent configuracao, int alturaMaxima){
+        this.configuracoes.add(configuracao);
         JPanel painelConfiguracao = new JPanel();
         painelConfiguracao.setBackground(SimulacaoMicroscopica.COR_FUNDO);
         painelConfiguracao.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, SimulacaoMicroscopica.COR_SEPARADOR),
@@ -80,6 +87,24 @@ public class PainelConfiguracoes extends JPanel{
             painelConfiguracao.setMaximumSize(new Dimension(Integer.MAX_VALUE, alturaMaxima + 10));
         }
         return painelConfiguracao;
+    }
+    
+    /**
+     * Desabilita o painel de configurações.
+     */
+    public void desabilitaConfiguracoes(){
+        this.configuracoes.forEach((configuracao) -> {
+            configuracao.setEnabled(false);
+        });
+    }
+    
+    /**
+     * Desabilita o painel de configurações.
+     */
+    public void habilitaConfiguracoes(){
+        this.configuracoes.forEach((configuracao) -> {
+            configuracao.setEnabled(true);
+        });
     }
     
 }

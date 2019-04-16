@@ -24,6 +24,7 @@ public class ControleSimulacao implements IControleSimulacao{
      * {@inheritdoc}
      */
     public void finalizaSimulacao() {
+        SimulacaoMicroscopica.getInstance().log("Finalizando simulação.");
         SimulacaoMicroscopica.getInstance().fechaSimulacao();
     }
 

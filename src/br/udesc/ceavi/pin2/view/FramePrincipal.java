@@ -41,6 +41,7 @@ public class FramePrincipal extends JFrame{
         JPanel painelBase = new PainelInicial();
         this.setContentPane(painelBase);
         this.setVisible(true);
+        SimulacaoMicroscopica.getInstance().log("Criada tela inicial da aplicação.");
     }
     
     /**
@@ -53,6 +54,7 @@ public class FramePrincipal extends JFrame{
         JPanel painelBase = new PainelSimulacao();
         this.setContentPane(painelBase);
         this.setVisible(true);
+        SimulacaoMicroscopica.getInstance().log("Criada tela de execução da aplicação.");
     }
     
 }

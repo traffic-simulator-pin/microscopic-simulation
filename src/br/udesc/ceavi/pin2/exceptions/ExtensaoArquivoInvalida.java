@@ -18,6 +18,7 @@ public class ExtensaoArquivoInvalida extends Exception{
      * @param extensaoValida   - Extensões aceitas.
      */
     public ExtensaoArquivoInvalida(String extensaoOriginal, String... extensaoValida) {
+        super();
         this.extensaoOriginal = extensaoOriginal;
         this.extensaoValida   = extensaoValida;
     }

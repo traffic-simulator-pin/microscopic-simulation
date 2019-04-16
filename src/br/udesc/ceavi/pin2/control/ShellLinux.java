@@ -1,47 +1,48 @@
 package br.udesc.ceavi.pin2.control;
 
+import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
+ * Shell para execução de comandos no linux.
  * @author João Pedro Schmitz
  */
 public class ShellLinux extends Shell {
 
-    public ShellLinux(String commands) {
-        super(commands);
+    /**
+     * Cria um novo shell para execução de comandos no linux.
+     * @param comando 
+     * @param listener 
+     */
+    public ShellLinux(String[] comando, ShellListener listener) {
+        super(comando, listener);
     }
 
     @Override
-    public String runShell() {
+    /**
+     * {@inheritdoc}
+     */
+    public String runCommand(String comando) throws ErroExecucaoCommando{
         try {
-            Process process = Runtime.getRuntime().exec(commands);
+            Process process = Runtime.getRuntime().exec(String.format("sh -c %s", comando));
             StringBuilder output = new StringBuilder();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output.append(line + "\n");
-            }
+            reader.lines().forEach((String line) -> {
+                output.append(line).append("\n");
+            });
 
             int exitVal = process.waitFor();
             if (exitVal == 0) {
-                System.out.println("Success!");
-                return output.toString();
-            } else {
-
+                throw new ErroExecucaoCommando(comando, new Exception(output.toString()));
             }
-        } catch (IOException ex) {
-            Logger.getLogger(ShellLinux.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ShellLinux.class.getName()).log(Level.SEVERE, null, ex);
+            return output.toString();
+        } catch (IOException | InterruptedException ex) {
+            throw new ErroExecucaoCommando(comando, ex);
         }
-        return "";
     }
 
 }

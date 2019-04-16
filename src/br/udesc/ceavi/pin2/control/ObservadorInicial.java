@@ -1,5 +1,6 @@
 package br.udesc.ceavi.pin2.control;
 
+import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.io.File;
 
 /**
@@ -13,5 +14,21 @@ public interface ObservadorInicial {
      * @param arquivo 
      */
     public void arquivoCarregado(File arquivo);
+    
+    /**
+     * Indica que a rede está sendo carregada;
+     */
+    public void inicioGeracaoRede();
+    
+    /**
+     * Indica o sucesso no carregamento da rede;
+     */
+    public void sucessoGeracaoRede();
+    
+    /**
+     * Indica um erro no carregamento da rede;
+     * @param ex
+     */
+    public void erroGeracaoRede(LogException ex);
     
 }

@@ -1,6 +1,7 @@
 package br.udesc.ceavi.pin2.control;
 
 import br.udesc.ceavi.pin2.exceptions.ExtensaoArquivoInvalida;
+import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.io.File;
 
 /**
@@ -19,7 +20,7 @@ public interface IControleInicial {
     /**
      * Ordena ao controlador para iniciar a simulação de dados com base no arquivo carregado.
      */
-    public void iniciaSimulacao();
+    public void iniciaSimulacao() throws LogException;
     
     /**
      * Anexa um observador ao controlador.
