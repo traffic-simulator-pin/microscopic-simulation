@@ -31,10 +31,4 @@ public interface ObservadorInicial {
      */
     public void erroGeracaoRede(LogException ex);
     
-    /**
-     * Indica um erro na geração do arquivo de POI na rede;
-     * @param ex
-     */
-    public void erroGeracaoDeArquivoDePOI(LogException ex);
-    
 }

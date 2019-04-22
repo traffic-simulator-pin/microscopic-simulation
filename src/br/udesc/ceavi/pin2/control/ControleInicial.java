@@ -148,15 +148,6 @@ public class ControleInicial implements IControleInicial, ShellListener {
         });
     }
     
-     /**
-     * Notifica os observadores erros na geração de arquivo POI
-     */
-    private void notificaErroGeracaoDeArquivoDePOI(LogException ex) {
-        this.observadores.forEach((observador) -> {
-            observador.erroGeracaoDeArquivoDePOI(ex);
-        });
-    }
-    
 
     @Override
     /**

@@ -115,10 +115,4 @@ public class PainelArquivo extends JPanel implements ObservadorInicial{
         this.botaoBuscar.setEnabled(true);
     }
 
-    @Override
-    public void erroGeracaoDeArquivoDePOI(LogException ex) {
-        this.arquivoAtual.setText("Houve um erro na geração de arquivo de POI da rede.");
-        this.botaoBuscar.setEnabled(true);
-    }
-    
 }

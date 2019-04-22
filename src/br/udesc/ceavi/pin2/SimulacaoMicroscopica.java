@@ -56,7 +56,7 @@ public class SimulacaoMicroscopica {
     
     private static SimulacaoMicroscopica instance;
     /**
-     * Retorna a atual ou uma nova (caso não exista) instância da Aplicação.
+     * Retorna a atual ou uma nova (caso não exista) instância da aplicação.
      * @return 
      */
     public static SimulacaoMicroscopica getInstance(){
