@@ -1,4 +1,4 @@
-package br.udesc.ceavi.pin2.control;
+package br.udesc.ceavi.pin2.utils.shell;
 
 import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
 

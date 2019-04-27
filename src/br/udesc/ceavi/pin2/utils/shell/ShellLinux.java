@@ -1,4 +1,4 @@
-package br.udesc.ceavi.pin2.control;
+package br.udesc.ceavi.pin2.utils.shell;
 
 import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
 import java.io.BufferedReader;
@@ -6,17 +6,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Shell para execução de comandos no Windows.
+ * Shell para execução de comandos no linux.
  * @author João Pedro Schmitz
  */
-public class ShellWindows extends Shell {
+public class ShellLinux extends Shell {
 
-/**
-     * Cria um novo shell para execução de comandos no Windows.
-     * @param comando
-     * @param listener
+    /**
+     * Cria um novo shell para execução de comandos no linux.
+     * @param comando 
+     * @param listener 
      */
-    public ShellWindows(String[] comando, ShellListener listener) {
+    public ShellLinux(String[] comando, ShellListener listener) {
         super(comando, listener);
     }
 
@@ -26,7 +26,7 @@ public class ShellWindows extends Shell {
      */
     public String runCommand(String comando) throws ErroExecucaoCommando{
         try {
-            Process process = Runtime.getRuntime().exec(String.format("cmd.exe /c %s", comando));
+            Process process = Runtime.getRuntime().exec(String.format("sh -c %s", comando));
             StringBuilder output = new StringBuilder();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -37,12 +37,12 @@ public class ShellWindows extends Shell {
 
             int exitVal = process.waitFor();
             if (exitVal != 0) {
-                throw new ErroExecucaoCommando(comando, new IllegalStateException("O retorno da aplicação(" + exitVal + ") é inválido:\n" + output.toString()));
+                throw new ErroExecucaoCommando(comando, new Exception(output.toString()));
             }
             return output.toString();
         } catch (IOException | InterruptedException ex) {
             throw new ErroExecucaoCommando(comando, ex);
         }
     }
-    
+
 }

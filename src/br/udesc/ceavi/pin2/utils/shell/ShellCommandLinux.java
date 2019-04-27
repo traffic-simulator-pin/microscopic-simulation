@@ -1,4 +1,4 @@
-package br.udesc.ceavi.pin2.control;
+package br.udesc.ceavi.pin2.utils.shell;
 
 /**
  * Fábrica para criação de comandos para execução no linux.

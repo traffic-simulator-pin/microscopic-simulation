@@ -1,5 +1,6 @@
 package br.udesc.ceavi.pin2.control;
 
+import br.udesc.ceavi.pin2.utils.shell.ShellListener;
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.exceptions.ErroCriacaoDiretorio;
 import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
@@ -18,7 +19,7 @@ import org.apache.commons.io.FilenameUtils;
  *
  * @author Jeferson Penz
  */
-public class ControleInicial implements IControleInicial, ShellListener {
+public class ControleInicial implements IControleInicial {
 
     // Modelo de simulação carregado do arquivo.
     private File arquivoSimulacao;
@@ -61,9 +62,9 @@ public class ControleInicial implements IControleInicial, ShellListener {
      */
     public void iniciaSimulacao() throws LogException{
         SimulacaoMicroscopica.getInstance().log("Iniciando processo de simulação.");
+        this.notificaInicioGeracaoRede();
         this.criaPastaTemporariaArquivo();
-        this.criaRedeTrafego();
-        this.criarArquivoDePOI();
+        //TODO Iniciar a thread.
     }
 
     /**
@@ -81,31 +82,8 @@ public class ControleInicial implements IControleInicial, ShellListener {
         SimulacaoMicroscopica.getInstance().log("Criada pasta " + file.getAbsolutePath());
         SimulacaoMicroscopica.getInstance().setWorkspaceFolder(file.getPath());
     }
-    
-    /**
-     * Realiza a criação dos arquivos da rede de tráfego.
-     */
-    private void criaRedeTrafego() {
-        SimulacaoMicroscopica.getInstance().log("Iniciando geração da rede de tráfego.");
-        this.notificaInicioGeracaoRede();
-        Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
-             "netconvert --osm-files " + this.arquivoSimulacao.getAbsolutePath() + " --geometry.remove --roundabouts.guess --ramps.guess --junctions.join --tls.guess-signals --tls.discard-simple --tls.join -o " + SimulacaoMicroscopica.getInstance().getWorkspaceFolder() + "/rede.net.xml",
-             SimulacaoMicroscopica.getInstance().getOperatingSystem().isWindows() ? "dir" : "ls"
-        );
-        terminal.start();
-    }
-    
-    private void criarArquivoDePOI() {
-        SimulacaoMicroscopica.getInstance().log("Iniciando geração de arquivo de pontos de interesse.");
-        File polygonUtil = new File("src/br/udesc/ceavi/pin2/utils/osmPolyconvert.typ.xml");
-        Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
-             "polyconvert --net-file " + this.arquivoSimulacao.getAbsolutePath() + " --osm-files " + this.arquivoSimulacao.getAbsolutePath() + " --type-file " + polygonUtil.getAbsolutePath() + " -o " + SimulacaoMicroscopica.getInstance().getWorkspaceFolder() + "/poi.net.xml",
-             SimulacaoMicroscopica.getInstance().getOperatingSystem().isWindows() ? "dir" : "ls"
-        );
-        terminal.start();
-    }
 
-    @Override
+    //TODO REMOVER
     public void onCommandSucess(String retorno) {
         SwingUtilities.invokeLater(() -> {
             SimulacaoMicroscopica.getInstance().log("Retorno:\n" + retorno);
@@ -114,7 +92,7 @@ public class ControleInicial implements IControleInicial, ShellListener {
         });
     }
 
-    @Override
+    //TODO REMOVER
     public void onCommandException(ErroExecucaoCommando ex) {
         SwingUtilities.invokeLater(() -> {
             this.notificaErroGeracaoRede(ex);

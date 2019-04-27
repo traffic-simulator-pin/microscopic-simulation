@@ -1,9 +1,9 @@
 package br.udesc.ceavi.pin2;
 
 import br.udesc.ceavi.pin2.control.IControleSimulacao;
-import br.udesc.ceavi.pin2.control.ShellCommand;
-import br.udesc.ceavi.pin2.control.ShellCommandLinux;
-import br.udesc.ceavi.pin2.control.ShellCommandWindows;
+import br.udesc.ceavi.pin2.utils.shell.ShellCommand;
+import br.udesc.ceavi.pin2.utils.shell.ShellCommandLinux;
+import br.udesc.ceavi.pin2.utils.shell.ShellCommandWindows;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 import br.udesc.ceavi.pin2.utils.OSUtils;
 import br.udesc.ceavi.pin2.view.FrameDetalhes;
