@@ -6,11 +6,15 @@ import br.udesc.ceavi.pin2.exceptions.ErroCriacaoDiretorio;
 import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
 import br.udesc.ceavi.pin2.exceptions.ExtensaoArquivoInvalida;
 import br.udesc.ceavi.pin2.exceptions.LogException;
+import br.udesc.ceavi.pin2.utils.ExecucaoMultiEtapas;
+import br.udesc.ceavi.pin2.utils.GeradorRede;
 import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import org.apache.commons.io.FilenameUtils;
 
@@ -25,6 +29,7 @@ public class ControleInicial implements IControleInicial {
     private File arquivoSimulacao;
 
     private final List<ObservadorInicial> observadores;
+    private ExecucaoMultiEtapas geradorDados;
 
     /**
      * Cria um novo controlador para realizar o controle inicial da simulação.
@@ -64,7 +69,36 @@ public class ControleInicial implements IControleInicial {
         SimulacaoMicroscopica.getInstance().log("Iniciando processo de simulação.");
         this.notificaInicioGeracaoRede();
         this.criaPastaTemporariaArquivo();
-        //TODO Iniciar a thread.
+        this.geradorDados = new GeradorRede(this.arquivoSimulacao);
+        if(this.realizaGeracaoDados()){
+            SwingUtilities.invokeLater(() -> {
+                SimulacaoMicroscopica.getInstance().log("Retorno:\n" + this.geradorDados.getRetorno());
+                this.notificaSucessoGeracaoRede();
+                SimulacaoMicroscopica.getInstance().iniciaSimulacao(null, null);
+            });
+        }
+        else {
+            SwingUtilities.invokeLater(() -> {
+                this.notificaErroGeracaoRede(this.geradorDados.getErro());
+            });
+        }
+    }
+    
+    /**
+     * Realiza a geração de dados de forma síncrona e retorna se a execução ocorreu com sucesso.
+     * @return 
+     */
+    private boolean realizaGeracaoDados(){
+        if(this.geradorDados == null){
+            return false;
+        }
+        new Thread(this.geradorDados).start();
+        while(!this.geradorDados.getExecucaoFinalizada()){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {}
+        }
+        return !this.geradorDados.getExecucaoErro();
     }
 
     /**
@@ -81,22 +115,6 @@ public class ControleInicial implements IControleInicial {
         }
         SimulacaoMicroscopica.getInstance().log("Criada pasta " + file.getAbsolutePath());
         SimulacaoMicroscopica.getInstance().setWorkspaceFolder(file.getPath());
-    }
-
-    //TODO REMOVER
-    public void onCommandSucess(String retorno) {
-        SwingUtilities.invokeLater(() -> {
-            SimulacaoMicroscopica.getInstance().log("Retorno:\n" + retorno);
-            this.notificaSucessoGeracaoRede();
-            SimulacaoMicroscopica.getInstance().iniciaSimulacao(null, null);
-        });
-    }
-
-    //TODO REMOVER
-    public void onCommandException(ErroExecucaoCommando ex) {
-        SwingUtilities.invokeLater(() -> {
-            this.notificaErroGeracaoRede(ex);
-        });
     }
     
     /**
