@@ -1,9 +1,7 @@
 package br.udesc.ceavi.pin2.control;
 
-import br.udesc.ceavi.pin2.utils.shell.ShellListener;
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.exceptions.ErroCriacaoDiretorio;
-import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
 import br.udesc.ceavi.pin2.exceptions.ExtensaoArquivoInvalida;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 import br.udesc.ceavi.pin2.utils.ExecucaoMultiEtapas;
@@ -13,8 +11,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import org.apache.commons.io.FilenameUtils;
 
