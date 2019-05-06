@@ -14,12 +14,19 @@ public abstract class ExecucaoMultiEtapas implements Runnable, ShellListener{
     private String retorno;
     private LogException erro;
 
+    public ExecucaoMultiEtapas() {
+        this.etapaAtual = 1;
+        this.retorno    = "";
+    }
+
     /**
      * {@inheritdoc}
      */
     @Override
     public void run() {
         this.etapaAtual = 1;
+        this.retorno    = "";
+        this.erro       = null;
         this.executaEtapa(this.etapaAtual);
     }
     
@@ -44,9 +51,14 @@ public abstract class ExecucaoMultiEtapas implements Runnable, ShellListener{
      */
     @Override
     public synchronized void onCommandSucess(String retorno) {
-        this.retorno = retorno;
-        this.etapaAtual++;
-        this.executaEtapa(this.etapaAtual);
+        this.retorno += retorno;
+        if(this.etapaAtual < this.getTotalEtapas()){
+            this.etapaAtual++;
+            this.executaEtapa(this.etapaAtual);
+        }
+        else {
+            this.etapaAtual = 0;
+        }
     }
     
     /**
@@ -61,7 +73,7 @@ public abstract class ExecucaoMultiEtapas implements Runnable, ShellListener{
      * Retorna o último retorno da aplicação.
      * @return 
      */
-    public String getRetorno() {
+    public synchronized String getRetorno() {
         return retorno;
     }
 
@@ -69,7 +81,7 @@ public abstract class ExecucaoMultiEtapas implements Runnable, ShellListener{
      * Retorna o último erro caso existente.
      * @return 
      */
-    public LogException getErro() {
+    public synchronized LogException getErro() {
         return erro;
     }
     
@@ -80,5 +92,11 @@ public abstract class ExecucaoMultiEtapas implements Runnable, ShellListener{
     public synchronized boolean getExecucaoErro(){
         return this.etapaAtual == -1;
     }
+    
+    /**
+     * Retorna o total de etapas para execução
+     * @return 
+     */
+    protected abstract int getTotalEtapas();
     
 }
