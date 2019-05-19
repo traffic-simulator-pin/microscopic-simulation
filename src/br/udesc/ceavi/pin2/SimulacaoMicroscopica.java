@@ -103,6 +103,7 @@ public class SimulacaoMicroscopica {
      */
     public void exibeDetalhes(IControleSimulacao controle) {
         this.frameDetalhes.carregaDetalhes(controle);
+        this.frameDetalhes.setLocation(this.frameAplicacao.getX() + this.frameAplicacao.getWidth(), this.frameAplicacao.getY());
         this.frameDetalhes.setVisible(true);
     }
 
@@ -166,9 +167,9 @@ public class SimulacaoMicroscopica {
         String nomeLog;
         String nomeErro;
         if (this.workspaceFolder != null && !this.workspaceFolder.isEmpty()) {
-            new File(this.workspaceFolder + File.separator + "logs").mkdir();
-            nomeLog = this.workspaceFolder + File.separator + "logs" + File.separator + "execution.log";
-            nomeErro = this.workspaceFolder + File.separator + "logs" + File.separator + "errors.log";
+            new File(trataEnderecoArquivo(this.workspaceFolder + "/logs")).mkdir();
+            nomeLog = trataEnderecoArquivo(this.workspaceFolder + "/logs/" + "execution.log");
+            nomeErro = trataEnderecoArquivo(this.workspaceFolder + "/logs/" + "errors.log");
         } else {
             nomeLog = this.getNomeArquivoLogSistema();
             nomeErro = nomeLog;
@@ -194,6 +195,15 @@ public class SimulacaoMicroscopica {
     }
 
     /**
+     * Realiza tratativas para o endereço do arquivo no sistema.
+     * @param endereco
+     * @return 
+     */
+    public String trataEnderecoArquivo(String endereco){
+        return endereco.replace('\\', File.separatorChar).replace('/', File.separatorChar);
+    }
+
+    /**
      * Armazena o log de uma excessão no arquivo de logs da aplicação.
      *
      * @param exception
@@ -214,7 +224,6 @@ public class SimulacaoMicroscopica {
     private final DateFormat dateFormatter = new SimpleDateFormat();
 
     public enum LOG_TYPE {
-
         EXECUTION, WARNING, ERROR
     }
 
@@ -224,7 +233,7 @@ public class SimulacaoMicroscopica {
      * @param type
      * @param message
      */
-    public void log(LOG_TYPE type, String message) {
+    protected void log(LOG_TYPE type, String message) {
         message = message.trim();
         message = dateFormatter.format(new Date()) + " - " + message;
         switch (type) {

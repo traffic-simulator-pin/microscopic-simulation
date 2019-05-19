@@ -50,7 +50,7 @@ public class FramePrincipal extends JFrame{
      */
     public void carregaTelaExecucaoSimulacao(){
         this.setVisible(false);
-        this.setSize(new Dimension(800, 600));
+        this.setSize(new Dimension(600, 400));
         this.getContentPane().removeAll();
         this.setLocationRelativeTo(null);
         JPanel painelBase = new PainelSimulacao();

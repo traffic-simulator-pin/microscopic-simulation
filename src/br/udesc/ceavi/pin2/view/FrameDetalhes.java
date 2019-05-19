@@ -47,7 +47,7 @@ public class FrameDetalhes extends JFrame{
      * Carrega a tela de detalhes da simulação.
      */
     public void carregaTelaDetalhes(){
-        this.setSize(new Dimension(800, 600));
+        this.setSize(new Dimension(600, 400));
         this.getContentPane().removeAll();
         this.setLocationRelativeTo(null);
         this.setContentPane(this.iniciaPainelDetalhes());

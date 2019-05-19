@@ -1,6 +1,8 @@
 package br.udesc.ceavi.pin2.control;
 
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
+import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
+import br.udesc.ceavi.pin2.utils.shell.ShellListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import java.util.List;
  * Controlador para realizar a execução da simulação.
  * @author Jeferson Penz
  */
-public class ControleSimulacao implements IControleSimulacao{
+public class ControleSimulacao implements IControleSimulacao, ShellListener{
     
     private final List<ObservadorSimulacao> observadores;
     
@@ -17,6 +19,16 @@ public class ControleSimulacao implements IControleSimulacao{
      */
     public ControleSimulacao() {
         this.observadores = new ArrayList<>();
+        this.iniciaSimulacao();
+    }
+    
+    private void iniciaSimulacao(){
+        SimulacaoMicroscopica.getInstance().log("Iniciando geração da rede de tráfego.");
+        Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
+            "sumo-gui -n " + SimulacaoMicroscopica.getInstance().trataEnderecoArquivo(SimulacaoMicroscopica.getInstance().getWorkspaceFolder() + "/rede.net.xml") +
+                    " --game --game.mode tsl --window-size 1000,400 --window-position "
+        );
+        terminal.start();
     }
 
     @Override
@@ -42,6 +54,16 @@ public class ControleSimulacao implements IControleSimulacao{
      */
     public void desanexaObservador(ObservadorSimulacao observador){
         this.observadores.remove(observador);
+    }
+
+    @Override
+    public void onCommandException(ErroExecucaoCommando ex) {
+        this.finalizaSimulacao();
+    }
+
+    @Override
+    public void onCommandSucess(String retorno) {
+        
     }
     
 }

@@ -4,8 +4,8 @@ import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -19,7 +19,7 @@ import javax.swing.JPanel;
  */
 public class PainelConfiguracoes extends JPanel{
     
-    private List<JComponent> configuracoes;
+    private Map<String, JComponent> configuracoes;
 
     /**
      * Cria um novo painel para realizar a configuracao dos dados da simulação.
@@ -34,7 +34,7 @@ public class PainelConfiguracoes extends JPanel{
      * Realiza a inicialização das propriedades do painel.
      */
     private void iniciaPropriedades() {
-        this.configuracoes = new ArrayList<>();
+        this.configuracoes = new HashMap<>();
         this.setBackground(SimulacaoMicroscopica.COR_FUNDO);
         this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(2, 0, 2, 0, SimulacaoMicroscopica.COR_BORDA),
                                                           BorderFactory.createEmptyBorder(10, 10, 10, 10)));
@@ -52,8 +52,8 @@ public class PainelConfiguracoes extends JPanel{
         JComboBox<String> velocidade = new JComboBox<>(new String[] { "200%", "100%", "50%", "25%" });
         velocidade.setSelectedItem("100%");
         this.add(titulo);
-        this.add(this.criaPainelConfiguracao("Densidade",  densidade, 25));
-        this.add(this.criaPainelConfiguracao("Velocidade", velocidade, 25));
+        this.add(this.criaPainelConfiguracao("densidade", "Densidade",  densidade, 25));
+        this.add(this.criaPainelConfiguracao("velocidade", "Velocidade", velocidade, 25));
     }
     
     /**
@@ -62,8 +62,8 @@ public class PainelConfiguracoes extends JPanel{
      * @param configuracao
      * @return 
      */
-    private JPanel criaPainelConfiguracao(String label, JComponent configuracao){
-        return this.criaPainelConfiguracao(label, configuracao, 0);
+    private JPanel criaPainelConfiguracao(String id, String label, JComponent configuracao){
+        return this.criaPainelConfiguracao(id, label, configuracao, 0);
     }
     
     /**
@@ -72,8 +72,8 @@ public class PainelConfiguracoes extends JPanel{
      * @param configuracao
      * @return 
      */
-    private JPanel criaPainelConfiguracao(String label, JComponent configuracao, int alturaMaxima){
-        this.configuracoes.add(configuracao);
+    private JPanel criaPainelConfiguracao(String id, String label, JComponent configuracao, int alturaMaxima){
+        this.configuracoes.put(id, configuracao);
         JPanel painelConfiguracao = new JPanel();
         painelConfiguracao.setBackground(SimulacaoMicroscopica.COR_FUNDO);
         painelConfiguracao.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, SimulacaoMicroscopica.COR_SEPARADOR),
@@ -92,8 +92,10 @@ public class PainelConfiguracoes extends JPanel{
      * Desabilita o painel de configurações.
      */
     public void desabilitaConfiguracoes(){
-        this.configuracoes.forEach((configuracao) -> {
-            configuracao.setEnabled(false);
+        this.configuracoes.entrySet().stream().map((entry) -> {
+            return entry;
+        }).map((entry) -> entry.getValue()).forEachOrdered((value) -> {
+            value.setEnabled(false);
         });
     }
     
@@ -101,8 +103,10 @@ public class PainelConfiguracoes extends JPanel{
      * Desabilita o painel de configurações.
      */
     public void habilitaConfiguracoes(){
-        this.configuracoes.forEach((configuracao) -> {
-            configuracao.setEnabled(true);
+        this.configuracoes.entrySet().stream().map((entry) -> {
+            return entry;
+        }).map((entry) -> entry.getValue()).forEachOrdered((value) -> {
+            value.setEnabled(true);
         });
     }
     
