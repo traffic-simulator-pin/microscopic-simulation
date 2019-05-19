@@ -49,6 +49,7 @@ public class FrameDetalhes extends JFrame{
     public void carregaTelaDetalhes(){
         this.setSize(new Dimension(800, 600));
         this.getContentPane().removeAll();
+        this.setLocationRelativeTo(null);
         this.setContentPane(this.iniciaPainelDetalhes());
     }
 

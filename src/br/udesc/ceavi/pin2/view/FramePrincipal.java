@@ -38,6 +38,7 @@ public class FramePrincipal extends JFrame{
         this.setVisible(false);
         this.setSize(new Dimension(400, 300));
         this.getContentPane().removeAll();
+        this.setLocationRelativeTo(null);
         JPanel painelBase = new PainelInicial();
         this.setContentPane(painelBase);
         this.setVisible(true);
@@ -51,6 +52,7 @@ public class FramePrincipal extends JFrame{
         this.setVisible(false);
         this.setSize(new Dimension(800, 600));
         this.getContentPane().removeAll();
+        this.setLocationRelativeTo(null);
         JPanel painelBase = new PainelSimulacao();
         this.setContentPane(painelBase);
         this.setVisible(true);
