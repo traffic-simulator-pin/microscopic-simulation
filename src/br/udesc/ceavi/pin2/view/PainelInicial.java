@@ -58,7 +58,7 @@ public class PainelInicial extends JPanel implements ObservadorInicial{
         });
         this.painelAcoes.desabilitaAcao("iniciar");
         this.add(painelArquivo, BorderLayout.NORTH);
-        this.add(painelConfig,  BorderLayout.CENTER);
+        // this.add(painelConfig,  BorderLayout.CENTER);
         this.add(painelAcoes,   BorderLayout.SOUTH);
     }
 

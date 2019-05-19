@@ -73,6 +73,7 @@ public class GeradorRede extends ExecucaoMultiEtapas {
                 + this.pastaSimulacao.getAbsolutePath() + File.separator + "rede.net.xml"
         );
         terminal.start();
+        SimulacaoMicroscopica.getInstance().log("Arquivo de rede de tráfego gerado.");
     }
 
     /**
@@ -88,6 +89,7 @@ public class GeradorRede extends ExecucaoMultiEtapas {
                 + polygonUtil.getAbsolutePath() + " -o " + this.pastaSimulacao.getAbsolutePath() + File.separator + "poi.net.xml"
         );
         terminal.start();
+        SimulacaoMicroscopica.getInstance().log("Arquivo de pontos de interesse gerado.");
     }
 
     /**
@@ -95,12 +97,14 @@ public class GeradorRede extends ExecucaoMultiEtapas {
      */
     private void criarArquivoDeTrafego() {
         SimulacaoMicroscopica.getInstance().log("Iniciando geração de arquivo de trafégo.");
+        File randomTrips = new File(SimulacaoMicroscopica.getInstance().trataEnderecoArquivo("src/br/udesc/ceavi/pin2/utils/randomTrips.py"));
         Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
-                "%SUMO_HOME%" + File.separator + "tools" + File.separator + "randomTrips.py -n "
+                randomTrips.getAbsolutePath() + " -n "
                 + this.pastaSimulacao.getAbsolutePath() + File.separator + "rede.net.xml -e 5000 -r "
                 + this.pastaSimulacao.getAbsolutePath() + File.separator + "rotas.rou.xml"
         );
         terminal.start();
+        SimulacaoMicroscopica.getInstance().log("Arquivo de trafégo gerado.");
     }
 
     /**
@@ -170,6 +174,19 @@ public class GeradorRede extends ExecucaoMultiEtapas {
             report.appendChild(log);
 
             root.appendChild(report);
+            
+            Element additional = document.createElement("additional");
+            Element type = document.createElement("vType");
+            Attr maxSpeed = document.createAttribute("maxSpeed");
+            maxSpeed.setValue("27.8");
+            type.setAttributeNode(maxSpeed);
+            
+            Attr vClass = document.createAttribute("vClass");
+            vClass.setValue("car");
+            type.setAttributeNode(vClass);
+            
+            additional.appendChild(type);
+            root.appendChild(additional);
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
@@ -193,7 +210,7 @@ public class GeradorRede extends ExecucaoMultiEtapas {
     private void iniciarSimulacao() {
         SimulacaoMicroscopica.getInstance().log("Iniciando a simulação");
         Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
-                "sumo-gui -c " + this.pastaSimulacao.getAbsolutePath() + File.separator + "simulacao.sumocfg"
+                "sumo-gui --max-num-vehicles 500 -c " + this.pastaSimulacao.getAbsolutePath() + File.separator + "simulacao.sumocfg"
         );
         terminal.start();
     }

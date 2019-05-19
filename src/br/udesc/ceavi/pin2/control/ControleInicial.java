@@ -6,15 +6,11 @@ import br.udesc.ceavi.pin2.exceptions.ExtensaoArquivoInvalida;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 import br.udesc.ceavi.pin2.utils.ExecucaoMultiEtapas;
 import br.udesc.ceavi.pin2.utils.GeradorRede;
-import com.sun.xml.internal.ws.util.StringUtils;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.swing.SwingUtilities;
 import org.apache.commons.io.FilenameUtils;
 
