@@ -43,7 +43,9 @@ public class GeradorRede extends ExecucaoMultiEtapas{
     private void criaRedeTrafego() {
         SimulacaoMicroscopica.getInstance().log("Iniciando geração da rede de tráfego.");
         Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
-             "netconvert --osm-files " + this.arquivoSimulacao.getAbsolutePath() + " --geometry.remove --roundabouts.guess --ramps.guess --junctions.join --tls.guess-signals --tls.discard-simple --tls.join -o " + this.pastaSimulacao.getAbsolutePath() + File.separator + "rede.net.xml"
+             "netconvert --osm-files " + this.arquivoSimulacao.getAbsolutePath() +
+                       " --geometry.remove --roundabouts.guess --ramps.guess --junctions.join --tls.guess-signals --tls.discard-simple --tls.join" +
+                       " -o " + SimulacaoMicroscopica.getInstance().trataEnderecoArquivo(this.pastaSimulacao.getAbsolutePath() + "/rede.net.xml")
         );
         terminal.start();
     }
@@ -53,9 +55,12 @@ public class GeradorRede extends ExecucaoMultiEtapas{
      */
     private void criarArquivoDePOI() {
         SimulacaoMicroscopica.getInstance().log("Iniciando geração de arquivo de pontos de interesse.");
-        File polygonUtil = new File("src/br/udesc/ceavi/pin2/utils/osmPolyconvert.typ.xml");
+        File polygonUtil = new File(SimulacaoMicroscopica.getInstance().trataEnderecoArquivo("src/br/udesc/ceavi/pin2/utils/osmPolyconvert.typ.xml"));
         Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
-             "polyconvert --net-file " + SimulacaoMicroscopica.getInstance().getWorkspaceFolder() + File.separator + "rede.net.xml --osm-files " + this.arquivoSimulacao.getAbsolutePath() + " --type-file " + polygonUtil.getAbsolutePath() + " -o " + this.pastaSimulacao.getAbsolutePath() + File.separator + "poi.net.xml"
+             "polyconvert --net-file " + SimulacaoMicroscopica.getInstance().trataEnderecoArquivo(SimulacaoMicroscopica.getInstance().getWorkspaceFolder() + "/rede.net.xml") + 
+                        " --osm-files " + this.arquivoSimulacao.getAbsolutePath() +
+                        " --type-file " + polygonUtil.getAbsolutePath() +
+                        " -o " + SimulacaoMicroscopica.getInstance().trataEnderecoArquivo(this.pastaSimulacao.getAbsolutePath() + "/poi.net.xml")
         );
         terminal.start();
     }

@@ -73,4 +73,26 @@ public class PainelAcoes extends JPanel{
         }
     }
     
+    /**
+     * Exibe uma ação oculta no painel de ações.
+     * @param identificador 
+     */
+    public void exibeAcao(String identificador){
+        JButton acao = this.acoes.get(identificador);
+        if(acao != null){
+            acao.setVisible(true);
+        }
+    }
+    
+    /**
+     * Oculta uma ação no painel de ações.
+     * @param identificador 
+     */
+    public void ocultaAcao(String identificador){
+        JButton acao = this.acoes.get(identificador);
+        if(acao != null){
+            acao.setVisible(false);
+        }
+    }
+    
 }

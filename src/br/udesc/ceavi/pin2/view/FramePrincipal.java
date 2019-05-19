@@ -49,7 +49,7 @@ public class FramePrincipal extends JFrame{
      */
     public void carregaTelaExecucaoSimulacao(){
         this.setVisible(false);
-        this.setSize(new Dimension(800, 600));
+        this.setSize(new Dimension(600, 400));
         this.getContentPane().removeAll();
         JPanel painelBase = new PainelSimulacao();
         this.setContentPane(painelBase);

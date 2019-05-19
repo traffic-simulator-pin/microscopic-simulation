@@ -5,10 +5,8 @@ import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.control.ControleSimulacao;
 import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -19,7 +17,6 @@ public class PainelSimulacao extends JPanel implements ObservadorSimulacao{
     
     private IControleSimulacao controller;
     private JPanel             painelConfig;
-    private JPanel             painelSimulacao;
     private PainelAcoes        painelAcoes;
     
     /**
@@ -47,9 +44,6 @@ public class PainelSimulacao extends JPanel implements ObservadorSimulacao{
      */
     private void iniciaComponentes() {
         this.painelConfig    = new PainelConfiguracoes();
-        this.painelSimulacao = new JPanel();
-        this.painelSimulacao.setBackground(new Color(100, 100, 100));
-        this.painelSimulacao.add(new JLabel("Aqui estaria a simulação?")); // TODO REMOVER
         this.painelAcoes     = new PainelAcoes();
         this.painelAcoes.adicionaAcao("finalizar", "Finalizar Simulação", (ActionEvent e) -> {
             this.controller.finalizaSimulacao();
@@ -57,8 +51,8 @@ public class PainelSimulacao extends JPanel implements ObservadorSimulacao{
         this.painelAcoes.adicionaAcao("detalhar", "Detalhes da Simulação", (ActionEvent e) -> {
             SimulacaoMicroscopica.getInstance().exibeDetalhes(this.controller);
         });
+        this.painelAcoes.ocultaAcao("detalhar");
         this.add(painelConfig,    BorderLayout.NORTH);
-        this.add(painelSimulacao, BorderLayout.CENTER);
         this.add(painelAcoes,     BorderLayout.SOUTH);
     }
 }
