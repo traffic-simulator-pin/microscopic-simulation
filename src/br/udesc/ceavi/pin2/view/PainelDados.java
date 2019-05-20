@@ -12,7 +12,7 @@ import javax.swing.JScrollPane;
 
 /**
  * Painel para os dados da simulação
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public class PainelDados extends JPanel{
     

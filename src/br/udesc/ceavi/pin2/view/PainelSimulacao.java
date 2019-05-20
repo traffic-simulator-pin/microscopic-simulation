@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 /**
  * Painel para a tela de simulação da aplicação.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public class PainelSimulacao extends JPanel implements ObservadorSimulacao{
     

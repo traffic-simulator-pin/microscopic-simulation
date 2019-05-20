@@ -2,7 +2,7 @@ package br.udesc.ceavi.pin2.control;
 
 /**
  * Interface para realizar o controle da simulação.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public interface IControleSimulacao {
     

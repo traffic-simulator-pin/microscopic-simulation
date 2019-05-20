@@ -5,7 +5,7 @@ import java.io.File;
 
 /**
  * Interface para observadores relacionados a inicialização da simulação.
- * @author Jeferson Penz, João Pedro Schmitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public interface ObservadorInicial {
     

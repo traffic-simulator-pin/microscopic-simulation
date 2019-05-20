@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 /**
  * Painel para a tela inicial da aplicação.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public class PainelInicial extends JPanel implements ObservadorInicial{
     

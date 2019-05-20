@@ -1,14 +1,12 @@
 package br.udesc.ceavi.pin2.utils;
 
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
+import br.udesc.ceavi.pin2.exceptions.ErroGeracaoArquivoXML;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -20,7 +18,7 @@ import org.w3c.dom.Element;
 /**
  * Classe responsável por gerar os arquivos de rede de tráfego.
  *
- * @author jpedroschmitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public class GeradorRede extends ExecucaoMultiEtapas {
 
@@ -194,14 +192,10 @@ public class GeradorRede extends ExecucaoMultiEtapas {
             StreamResult streamResult = new StreamResult(new File(this.pastaSimulacao.getAbsolutePath() + File.separator + "simulacao.sumocfg"));
 
             transformer.transform(domSource, streamResult);
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(GeradorRede.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerConfigurationException ex) {
-            Logger.getLogger(GeradorRede.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerException ex) {
-            Logger.getLogger(GeradorRede.class.getName()).log(Level.SEVERE, null, ex);
+            this.notificaSucessoExecucaoComando("\nArquivo de simulação gerado.\n");
+        } catch (ParserConfigurationException | TransformerException ex) {
+            this.notificaErroExecucaoComando(new ErroGeracaoArquivoXML(ex));
         }
-        SimulacaoMicroscopica.getInstance().log("Arquivo de simulação gerado.");
     }
 
     /**

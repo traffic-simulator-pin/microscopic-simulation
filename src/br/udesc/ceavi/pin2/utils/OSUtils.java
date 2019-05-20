@@ -2,7 +2,7 @@ package br.udesc.ceavi.pin2.utils;
 
 /**
  *
- * @author João Pedro Schmitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public class OSUtils {
 

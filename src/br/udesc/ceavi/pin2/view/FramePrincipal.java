@@ -8,7 +8,7 @@ import javax.swing.SwingUtilities;
 
 /**
  * Tela Principal da aplicação.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public class FramePrincipal extends JFrame{
 

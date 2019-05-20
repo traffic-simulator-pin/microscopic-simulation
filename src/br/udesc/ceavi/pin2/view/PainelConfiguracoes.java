@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 /**
  * Painel para realizar a configuração dos dados da simulação.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public class PainelConfiguracoes extends JPanel{
     

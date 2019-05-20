@@ -17,7 +17,7 @@ import org.apache.commons.io.FilenameUtils;
 /**
  * Controlador para a tela inicial da aplicação.
  *
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public class ControleInicial implements IControleInicial {
 
@@ -66,18 +66,16 @@ public class ControleInicial implements IControleInicial {
         this.notificaInicioGeracaoRede();
         this.criaPastaTemporariaArquivo();
         this.geradorDados = new GeradorRede(this.arquivoSimulacao);
-        if(this.realizaGeracaoDados()){
-            SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> {
+            if(this.realizaGeracaoDados()){
                 SimulacaoMicroscopica.getInstance().log("Retorno:\n" + this.geradorDados.getRetorno());
                 this.notificaSucessoGeracaoRede();
                 SimulacaoMicroscopica.getInstance().iniciaSimulacao(null, null);
-            });
-        }
-        else {
-            SwingUtilities.invokeLater(() -> {
+            }
+            else {
                 this.notificaErroGeracaoRede(this.geradorDados.getErro());
-            });
-        }
+            }
+        });
     }
     
     /**

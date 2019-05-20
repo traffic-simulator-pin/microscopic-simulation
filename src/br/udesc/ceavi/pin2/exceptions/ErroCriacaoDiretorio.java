@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
  * Excessão lançada quando não é possível criar o diretório.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public class ErroCriacaoDiretorio extends LogException{
     

@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Controlador para realizar a execução da simulação.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public class ControleSimulacao implements IControleSimulacao, ShellListener{
     

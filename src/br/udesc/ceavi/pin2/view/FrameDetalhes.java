@@ -13,7 +13,7 @@ import javax.swing.SwingUtilities;
 
 /**
  * Frame com os detalhes da simulação.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public class FrameDetalhes extends JFrame{
     
