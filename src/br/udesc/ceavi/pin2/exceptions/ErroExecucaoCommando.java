@@ -2,7 +2,7 @@ package br.udesc.ceavi.pin2.exceptions;
 
 /**
  * Representa erros ocorridos durante uma tentativa de execução dos comandos.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class ErroExecucaoCommando extends LogException{
 

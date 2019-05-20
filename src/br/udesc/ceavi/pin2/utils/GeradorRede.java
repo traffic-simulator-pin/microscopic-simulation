@@ -18,7 +18,7 @@ import org.w3c.dom.Element;
 /**
  * Classe responsável por gerar os arquivos de rede de tráfego.
  *
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class GeradorRede extends ExecucaoMultiEtapas {
 

@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 /**
  * Painel para realizar a configuração dos dados da simulação.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class PainelConfiguracoes extends JPanel{
     
@@ -47,9 +47,9 @@ public class PainelConfiguracoes extends JPanel{
     private void iniciaComponentes() {
         JLabel titulo = new JLabel("Propriedades da Simulação");
         titulo.setFont(new Font(titulo.getFont().getName(), Font.BOLD, 12));
-        JComboBox<String> densidade = new JComboBox<>(new String[] { "100%", "50%", "20%", "10%" });
+        JComboBox<String> densidade = new JComboBox<>(new String[] { "1000", "500", "100", "50" });
         densidade.setSelectedItem("50%");
-        JComboBox<String> velocidade = new JComboBox<>(new String[] { "200%", "100%", "50%", "25%" });
+        JComboBox<String> velocidade = new JComboBox<>(new String[] { "200", "100", "50", "25" });
         velocidade.setSelectedItem("100%");
         this.add(titulo);
         this.add(this.criaPainelConfiguracao("densidade", "Densidade",  densidade, 25));

@@ -22,7 +22,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 /**
  * Classe Principal da Aplicação.
  *
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class SimulacaoMicroscopica {
 

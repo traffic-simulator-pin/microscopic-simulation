@@ -6,7 +6,7 @@ import java.io.File;
 
 /**
  * Interface para realizar o controle da tela inicial da aplicação.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public interface IControleInicial {
     

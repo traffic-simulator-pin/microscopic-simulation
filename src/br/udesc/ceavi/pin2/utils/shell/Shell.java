@@ -4,7 +4,7 @@ import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
 
 /**
  * Shell para execução dos comandos.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public abstract class Shell implements Runnable {
 

@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 /**
  * Painel para a tela inicial da aplicação.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class PainelInicial extends JPanel implements ObservadorInicial{
     
@@ -58,7 +58,7 @@ public class PainelInicial extends JPanel implements ObservadorInicial{
         });
         this.painelAcoes.desabilitaAcao("iniciar");
         this.add(painelArquivo, BorderLayout.NORTH);
-        // this.add(painelConfig,  BorderLayout.CENTER);
+        this.add(painelConfig,  BorderLayout.CENTER);
         this.add(painelAcoes,   BorderLayout.SOUTH);
     }
 
