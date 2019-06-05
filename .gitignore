@@ -180,6 +180,9 @@ hs_err_pid*
 **/nbproject/Makefile-*.mk
 **/nbproject/Package-*.bash
 build/
+build.xml
+nbbuild.xml
+manifest.mf
 nbproject/
 nbbuild/
 dist/
