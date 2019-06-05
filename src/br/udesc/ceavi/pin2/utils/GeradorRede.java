@@ -3,6 +3,7 @@ package br.udesc.ceavi.pin2.utils;
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.exceptions.ErroGeracaoArquivoXML;
 import java.io.File;
+import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -12,17 +13,21 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Classe responsável por gerar os arquivos de rede de tráfego.
  *
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João
+ * Pedro Schimitz
  */
 public class GeradorRede extends ExecucaoMultiEtapas {
 
-    private final File arquivoSimulacao;
+    private File arquivoSimulacao;
     private final File pastaSimulacao;
 
     /**
@@ -42,18 +47,175 @@ public class GeradorRede extends ExecucaoMultiEtapas {
     protected void executaEtapa(int etapa) {
         switch (etapa) {
             case 1:
-                this.criaRedeTrafego();
+                this.realocarArquivoDeEntrada();
                 break;
             case 2:
-                this.criarArquivoDePOI();
+                this.criarArquivoEdge();
                 break;
             case 3:
-                this.criarArquivoDeTrafego();
+                this.criarArquivoNode();
                 break;
             case 4:
+                this.criaRedeTrafego();
+                break;
+            case 5:
+                this.criarArquivoDePOI();
+                break;
+            case 6:
+                this.criarArquivoDeTrafego();
+                break;
+            case 7:
                 this.criarArquivoSimulacao();
                 break;
+            case 8:
+                this.iniciarSimulacao();
+                break;
         }
+    }
+
+    /* 
+     - View - JInternalFrame.
+     - Adicionar botões para escolher velocidade
+     - Gerar as rotas na mão.
+     - Integração com a lib para mostrar os dados da simulação em tempo real na tela de detalhes;
+     */
+    
+    private void realocarArquivoDeEntrada() {
+        try {
+            SimulacaoMicroscopica.getInstance().log("Copiando arquivos de entrada do XML para pasta da simulação.");
+            DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+            Document document = documentBuilder.newDocument();
+
+            Document documentoEntrada = documentBuilder.parse(this.arquivoSimulacao);
+            Element rootEntrada = documentoEntrada.getDocumentElement();
+            NodeList nodesList = rootEntrada.getElementsByTagName("node");
+            NodeList edgesList = rootEntrada.getElementsByTagName("edge");
+            Element root = document.createElement("data");
+            document.appendChild(root);
+
+            Element nodes = document.createElement("nodes");
+            root.appendChild(nodes);
+
+            for (int i = 0; i < nodesList.getLength(); i++) {
+                Element e = (Element) nodesList.item(i);
+                Element node = document.createElement("node");
+                node.setAttribute("id", e.getAttribute("id"));
+                node.setAttribute("x", e.getAttribute("x"));
+                node.setAttribute("y", e.getAttribute("y"));
+                nodes.appendChild(node);
+            }
+
+            Element edges = document.createElement("edges");
+            root.appendChild(edges);
+
+            for (int i = 0; i < edgesList.getLength(); i++) {
+                Element e = (Element) edgesList.item(i);
+                Element edge = document.createElement("edge");
+                edge.setAttribute("capacity", e.getAttribute("capacity"));
+                edge.setAttribute("id", e.getAttribute("id"));
+                edge.setAttribute("length", e.getAttribute("length"));
+                edge.setAttribute("name", e.getAttribute("name"));
+                edge.setAttribute("numLanes", e.getAttribute("numLanes"));
+                edge.setAttribute("oneway", e.getAttribute("oneway"));
+                edge.setAttribute("source", e.getAttribute("source"));
+                edge.setAttribute("speed", e.getAttribute("speed"));
+                edge.setAttribute("target", e.getAttribute("target"));
+                edge.setAttribute("type", e.getAttribute("type"));
+
+                edges.appendChild(edge);
+            }
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource domSource = new DOMSource(document);
+            File newFile = new File(this.pastaSimulacao.getAbsolutePath() + File.separator + "entrada.xml");
+            StreamResult streamResult = new StreamResult(newFile);
+            
+            this.arquivoSimulacao = newFile;
+            
+            transformer.transform(domSource, streamResult);
+        } catch (ParserConfigurationException | SAXException | IOException | DOMException | TransformerException e) {
+        }
+        SimulacaoMicroscopica.getInstance().log("Arquivo de entrada copiado.");
+    }
+
+    private void criarArquivoNode() {
+        SimulacaoMicroscopica.getInstance().log("Iniciando geração de arquivo de nodos pelo entrada.xml.");
+        try {
+            DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+            Document document = documentBuilder.newDocument();
+
+            Document documentoEntrada = documentBuilder.parse(this.arquivoSimulacao);
+            Element rootEntrada = documentoEntrada.getDocumentElement();
+            NodeList nodesList = rootEntrada.getElementsByTagName("node");
+            Element root = document.createElement("nodes");
+            document.appendChild(root);
+
+            for (int i = 0; i < nodesList.getLength(); i++) {
+                Element e = (Element) nodesList.item(i);
+                Element node = document.createElement("node");
+                node.setAttribute("id", e.getAttribute("id"));
+                node.setAttribute("x", e.getAttribute("x"));
+                node.setAttribute("y", e.getAttribute("y"));
+                root.appendChild(node);
+            }
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource domSource = new DOMSource(document);
+            StreamResult streamResult = new StreamResult(new File(this.pastaSimulacao.getAbsolutePath()
+                    + File.separator + "nodes.nod.xml"));
+            transformer.transform(domSource, streamResult);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        SimulacaoMicroscopica.getInstance().log("Arquivo de nodos criado.");
+    }
+
+    private void criarArquivoEdge() {
+        SimulacaoMicroscopica.getInstance().log("Iniciando geração de arquivo de edges pelo entrada.xml.");
+        System.out.println(this.arquivoSimulacao.getAbsolutePath());
+        try {
+            DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+            Document document = documentBuilder.newDocument();
+
+            Document documentoEntrada = documentBuilder.parse(this.arquivoSimulacao);
+            Element rootEntrada = documentoEntrada.getDocumentElement();
+            NodeList edgesList = rootEntrada.getElementsByTagName("edge");
+            Element root = document.createElement("edges");
+            document.appendChild(root);
+
+            for (int i = 0; i < edgesList.getLength(); i++) {
+
+                Element e = (Element) edgesList.item(i);
+                Element edge = document.createElement("edge");
+                edge.setAttribute("capacity", e.getAttribute("capacity"));
+                edge.setAttribute("id", e.getAttribute("id"));
+                edge.setAttribute("length", e.getAttribute("length"));
+                edge.setAttribute("name", e.getAttribute("name"));
+                edge.setAttribute("numLanes", e.getAttribute("numLanes"));
+                edge.setAttribute("oneway", e.getAttribute("oneway"));
+                edge.setAttribute("source", e.getAttribute("source"));
+                edge.setAttribute("speed", e.getAttribute("speed"));
+                edge.setAttribute("target", e.getAttribute("target"));
+                edge.setAttribute("type", e.getAttribute("type"));
+
+                root.appendChild(edge);
+            }
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource domSource = new DOMSource(document);
+            StreamResult streamResult = new StreamResult(new File(this.pastaSimulacao.getAbsolutePath() + File.separator + "edges.edg.xml"));
+            transformer.transform(domSource, streamResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        SimulacaoMicroscopica.getInstance().log("Arquivo de edges criado.");
     }
 
     /**
@@ -62,10 +224,15 @@ public class GeradorRede extends ExecucaoMultiEtapas {
      */
     private void criaRedeTrafego() {
         SimulacaoMicroscopica.getInstance().log("Iniciando geração da rede de tráfego.");
+        
+        System.out.println("netconvert --node-files=" + this.pastaSimulacao.getAbsolutePath() + File.separator + "nodes.nod.xml "
+                + "--edge-files=" + this.pastaSimulacao.getAbsolutePath() + File.separator + "edges.edg.xml "
+                + "--output-file=" + this.pastaSimulacao.getAbsolutePath() + File.separator + "rede.net.xml --ignore-errors.edge-type");
+        
         Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
-                "netconvert --osm-files " + this.arquivoSimulacao.getAbsolutePath()
-                + " --geometry.remove --roundabouts.guess --ramps.guess --junctions.join --tls.guess-signals --tls.discard-simple --tls.join -o "
-                + this.pastaSimulacao.getAbsolutePath() + File.separator + "rede.net.xml"
+                "netconvert --node-files=" + this.pastaSimulacao.getAbsolutePath() + File.separator + "nodes.nod.xml "
+                + "--edge-files=" + this.pastaSimulacao.getAbsolutePath() + File.separator + "edges.edg.xml "
+                + "--output-file=" + this.pastaSimulacao.getAbsolutePath() + File.separator + "rede.net.xml --ignore-errors.edge-type"
         );
         terminal.start();
         SimulacaoMicroscopica.getInstance().log("Arquivo de rede de tráfego gerado.");
@@ -169,17 +336,17 @@ public class GeradorRede extends ExecucaoMultiEtapas {
             report.appendChild(log);
 
             root.appendChild(report);
-            
+
             Element additional = document.createElement("additional");
             Element type = document.createElement("vType");
             Attr maxSpeed = document.createAttribute("maxSpeed");
             maxSpeed.setValue("27.8");
             type.setAttributeNode(maxSpeed);
-            
+
             Attr vClass = document.createAttribute("vClass");
             vClass.setValue("car");
             type.setAttributeNode(vClass);
-            
+
             additional.appendChild(type);
             root.appendChild(additional);
 
@@ -195,11 +362,22 @@ public class GeradorRede extends ExecucaoMultiEtapas {
         }
     }
 
+    /**
+     * Inicia a simulação
+     */
+    private void iniciarSimulacao() {
+        SimulacaoMicroscopica.getInstance().log("Iniciando a simulação");
+        Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
+                "sumo-gui --max-num-vehicles 500 -c " + this.pastaSimulacao.getAbsolutePath() + File.separator + "simulacao.sumocfg"
+        );
+        terminal.start();
+    }
+
     @Override
     /**
      * {@inheritdoc}
      */
     protected int getTotalEtapas() {
-        return 4;
+        return 8;
     }
 }

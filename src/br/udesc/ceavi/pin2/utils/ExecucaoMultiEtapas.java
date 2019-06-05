@@ -6,7 +6,7 @@ import br.udesc.ceavi.pin2.utils.shell.ShellListener;
 
 /**
  * Classe para execução de tarefas com múltiplas etapas.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
 public abstract class ExecucaoMultiEtapas implements Runnable, ShellListener{
     
