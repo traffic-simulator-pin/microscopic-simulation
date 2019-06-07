@@ -20,7 +20,8 @@ import javax.swing.JPanel;
 public class PainelConfiguracoes extends JPanel{
     
     private Map<String, JComponent> configuracoes;
-
+    private JComboBox<String> velocidade = new JComboBox<>(new String[] { "200", "100", "50", "25" });
+    private JComboBox<String> densidade = new JComboBox<>(new String[] { "1000", "5000", "250", "100" });
     /**
      * Cria um novo painel para realizar a configuracao dos dados da simulação.
      */
@@ -47,9 +48,7 @@ public class PainelConfiguracoes extends JPanel{
     private void iniciaComponentes() {
         JLabel titulo = new JLabel("Propriedades da Simulação");
         titulo.setFont(new Font(titulo.getFont().getName(), Font.BOLD, 12));
-        JComboBox<String> densidade = new JComboBox<>(new String[] { "100%", "50%", "20%", "10%" });
         densidade.setSelectedItem("50%");
-        JComboBox<String> velocidade = new JComboBox<>(new String[] { "200%", "100%", "50%", "25%" });
         velocidade.setSelectedItem("100%");
         this.add(titulo);
         this.add(this.criaPainelConfiguracao("densidade", "Densidade",  densidade, 25));
@@ -108,6 +107,14 @@ public class PainelConfiguracoes extends JPanel{
         }).map((entry) -> entry.getValue()).forEachOrdered((value) -> {
             value.setEnabled(true);
         });
+    }
+    
+    public String getSelectedVelocidade() {
+    	return velocidade.getSelectedItem().toString();
+    }
+    
+    public String getSelectedDensidade() {
+    	return densidade.getSelectedItem().toString();
     }
     
 }

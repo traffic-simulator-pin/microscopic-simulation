@@ -21,7 +21,7 @@ public interface IControleInicial {
      * Ordena ao controlador para iniciar a simulação de dados com base no arquivo carregado.
      * @throws br.udesc.ceavi.pin2.exceptions.LogException
      */
-    public void iniciaSimulacao() throws LogException;
+    public void iniciaSimulacao(String densidade, String velocidade) throws LogException;
     
     /**
      * Anexa um observador ao controlador.

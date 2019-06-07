@@ -2,7 +2,7 @@ package br.udesc.ceavi.pin2.view;
 
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import java.awt.Dimension;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -10,7 +10,7 @@ import javax.swing.SwingUtilities;
  * Tela Principal da aplicação.
  * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
-public class FramePrincipal extends JFrame{
+public class FramePrincipal extends JInternalFrame{
 
     /**
      * Cria uma nova tela principal para a aplicação.
@@ -38,7 +38,7 @@ public class FramePrincipal extends JFrame{
         this.setVisible(false);
         this.setSize(new Dimension(400, 300));
         this.getContentPane().removeAll();
-        this.setLocationRelativeTo(null);
+       // this.setLocationRelativeTo(null);
         JPanel painelBase = new PainelInicial();
         this.setContentPane(painelBase);
         this.setVisible(true);
@@ -52,7 +52,7 @@ public class FramePrincipal extends JFrame{
         this.setVisible(false);
         this.setSize(new Dimension(600, 400));
         this.getContentPane().removeAll();
-        this.setLocationRelativeTo(null);
+       // this.setLocationRelativeTo(null);
         JPanel painelBase = new PainelSimulacao();
         this.setContentPane(painelBase);
         this.setVisible(true);

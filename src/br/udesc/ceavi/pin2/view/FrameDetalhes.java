@@ -7,7 +7,7 @@ import br.udesc.ceavi.pin2.control.IControleSimulacao;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
  * Frame com os detalhes da simulação.
  * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
  */
-public class FrameDetalhes extends JFrame{
+public class FrameDetalhes extends JInternalFrame {
     
     private IControleDetalhes controller;
     private JPanel            painelDetalhes;
@@ -49,7 +49,7 @@ public class FrameDetalhes extends JFrame{
     public void carregaTelaDetalhes(){
         this.setSize(new Dimension(600, 400));
         this.getContentPane().removeAll();
-        this.setLocationRelativeTo(null);
+       // this.setLocationRelativeTo(null);
         this.setContentPane(this.iniciaPainelDetalhes());
     }
 

@@ -6,28 +6,13 @@ import br.udesc.ceavi.pin2.exceptions.ExtensaoArquivoInvalida;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 import br.udesc.ceavi.pin2.utils.ExecucaoMultiEtapas;
 import br.udesc.ceavi.pin2.utils.GeradorRede;
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.io.FilenameUtils;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * Controlador para a tela inicial da aplicação.
@@ -77,14 +62,11 @@ public class ControleInicial implements IControleInicial {
     /**
      * {@inheritdoc}
      */
-    public void iniciaSimulacao() throws LogException {
+    public void iniciaSimulacao(String densidade, String velocidade) throws LogException {
         SimulacaoMicroscopica.getInstance().log("Iniciando processo de simulação.");
-        //tratar o xml do outro grupo
-        //TODO 
-        //tratarXml();
         this.notificaInicioGeracaoRede();
         this.criaPastaTemporariaArquivo();
-        this.geradorDados = new GeradorRede(this.arquivoSimulacao);
+        this.geradorDados = new GeradorRede(this.arquivoSimulacao, densidade, velocidade);
         SwingUtilities.invokeLater(() -> {
             if (this.realizaGeracaoDados()) {
                 SimulacaoMicroscopica.getInstance().log("Retorno:\n" + this.geradorDados.getRetorno());
@@ -174,32 +156,6 @@ public class ControleInicial implements IControleInicial {
      */
     public void desanexaObservador(ObservadorInicial observador) {
         this.observadores.remove(observador);
-    }
-
-    private void tratarXml() {
-        //excluir as tags connections
-        try {
-        
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        
-        Document document = builder.parse(this.arquivoSimulacao);
-        Element root = document.getDocumentElement();
-        NodeList nodes = root.getElementsByTagName("conections");
-        
-        for(int i = 0; i < nodes.getLength(); i++){
-            Element e = (Element)nodes.item(i);
-            e.getParentNode().removeChild(e);
-        }
-
-             XMLSerializer serializer = new XMLSerializer(System.out, new OutputFormat((Document) document,"iso-8859-1",true));
-             serializer.serialize(document);
-        
-        } catch (ParserConfigurationException | SAXException | IOException | DOMException ex) {
-            Logger.getLogger(ControleInicial.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       
-
     }
 
 }

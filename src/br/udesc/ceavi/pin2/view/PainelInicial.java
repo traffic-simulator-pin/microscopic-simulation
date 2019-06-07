@@ -50,7 +50,7 @@ public class PainelInicial extends JPanel implements ObservadorInicial{
         this.painelAcoes   = new PainelAcoes();
         this.painelAcoes.adicionaAcao("iniciar", "Iniciar Simulação", (ActionEvent e) -> {
             try {
-                this.controller.iniciaSimulacao();
+                this.controller.iniciaSimulacao(painelConfig.getSelectedDensidade(), painelConfig.getSelectedVelocidade());
             } catch(LogException ex){
                 ex.generateLog();
                 JOptionPane.showMessageDialog(this, "Houve um erro ao iniciar a simulação:\n" + ex.getMessage());
@@ -58,7 +58,7 @@ public class PainelInicial extends JPanel implements ObservadorInicial{
         });
         this.painelAcoes.desabilitaAcao("iniciar");
         this.add(painelArquivo, BorderLayout.NORTH);
-        // this.add(painelConfig,  BorderLayout.CENTER);
+        this.add(painelConfig,  BorderLayout.CENTER);
         this.add(painelAcoes,   BorderLayout.SOUTH);
     }
 
