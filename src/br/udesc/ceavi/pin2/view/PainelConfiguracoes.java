@@ -26,7 +26,8 @@ import javax.swing.text.NumberFormatter;
 public class PainelConfiguracoes extends JPanel{
     
     private Map<String, JComponent> configuracoes;
-
+    private JComboBox<String> velocidade = new JComboBox<>(new String[] { "200", "100", "50", "25" });
+    private JComboBox<String> densidade = new JComboBox<>(new String[] { "1000", "5000", "250", "100" });
     /**
      * Cria um novo painel para realizar a configuracao dos dados da simulação.
      */

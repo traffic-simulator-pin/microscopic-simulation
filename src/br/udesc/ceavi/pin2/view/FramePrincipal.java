@@ -13,7 +13,7 @@ import javax.swing.event.InternalFrameEvent;
  * Tela Principal da aplicação.
  * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
-public class FramePrincipal extends JFrame{
+public class FramePrincipal extends JInternalFrame{
 
     /**
      * Cria uma nova tela principal para a aplicação.

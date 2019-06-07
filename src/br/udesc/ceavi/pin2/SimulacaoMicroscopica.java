@@ -8,6 +8,7 @@ import br.udesc.ceavi.pin2.exceptions.LogException;
 import br.udesc.ceavi.pin2.utils.OSUtils;
 import br.udesc.ceavi.pin2.view.FrameDetalhes;
 import br.udesc.ceavi.pin2.view.FramePrincipal;
+import br.udesc.ceavi.pin2.view.FrameTemporario;
 import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,7 +30,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class SimulacaoMicroscopica {
 
     public static final String NOME_APLICACAO = "Simulação Microscópica - Projeto Integrador";
-    public static final String EXTENSAO_ARQUIVO = "osm";
+    public static final String EXTENSAO_ARQUIVO = "xml";
     public static final String FORMATO_DATA = "yyyy.MM.dd.HH.mm.ss";
     public static final Color COR_FUNDO = new Color(245, 245, 245);
     public static final Color COR_BORDA = new Color(190, 190, 190);
@@ -41,6 +42,9 @@ public class SimulacaoMicroscopica {
 
     private final FramePrincipal frameAplicacao;
     private final FrameDetalhes frameDetalhes;
+    //TODO trocar pelo frame principar que unirá os 4 grupos
+    private final FrameTemporario temp;
+    
     private String workspaceFolder;
     private BufferedWriter geradorLogs;
     private BufferedWriter geradorLogsErros;
@@ -54,6 +58,7 @@ public class SimulacaoMicroscopica {
     private SimulacaoMicroscopica() {
         this.frameAplicacao = new FramePrincipal();
         this.frameDetalhes = new FrameDetalhes();
+        this.temp = new FrameTemporario();
         File log = new File(this.getNomeArquivoLogSistema());
         if (log.exists()) {
             log.delete();
@@ -80,6 +85,7 @@ public class SimulacaoMicroscopica {
      */
     public void iniciaAplicacao() {
         this.frameAplicacao.carregaTelaInicialSimulacao();
+        this.temp.add(this.frameAplicacao);
     }
 
     /**

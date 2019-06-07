@@ -10,7 +10,7 @@ import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -52,7 +52,7 @@ public class FrameDetalhes extends JFrame implements ObservadorSimulacao{
     public void carregaTelaDetalhes(){
         this.setSize(new Dimension(600, 400));
         this.getContentPane().removeAll();
-        this.setLocationRelativeTo(null);
+       // this.setLocationRelativeTo(null);
         this.setContentPane(this.iniciaPainelDetalhes());
     }
 
