@@ -2,8 +2,8 @@ package br.udesc.ceavi.pin2.utils;
 
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.exceptions.ErroGeracaoArquivoXML;
+import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.io.File;
-import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,11 +13,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * Classe responsável por gerar os arquivos de rede de tráfego.
@@ -36,6 +34,8 @@ public class GeradorRede extends ExecucaoMultiEtapas {
      * Cria um novo controle para geração do arquivo da rede
      *
      * @param arquivoSimulacao
+     * @param densidade
+     * @param velocidade
      */
     public GeradorRede(File arquivoSimulacao, String densidade, String velocidade) {
         this.arquivoSimulacao = arquivoSimulacao;
@@ -74,15 +74,16 @@ public class GeradorRede extends ExecucaoMultiEtapas {
             case 8:
                 this.iniciarSimulacao();
                 break;
+            default:
+                break;
         }
     }
 
     /* 
-     - View - JInternalFrame.
      - Gerar as rotas na mão.
+     - Liberar botões para nova execução no caso de erro
      - Integração com a lib para mostrar os dados da simulação em tempo real na tela de detalhes;
      */
-    
     private void realocarArquivoDeEntrada() {
         try {
             SimulacaoMicroscopica.getInstance().log("Copiando arquivos de entrada do XML para pasta da simulação.");
@@ -104,8 +105,8 @@ public class GeradorRede extends ExecucaoMultiEtapas {
                 Element e = (Element) nodesList.item(i);
                 Element node = document.createElement("node");
                 node.setAttribute("id", e.getAttribute("id"));
-                node.setAttribute("lon", e.getAttribute("x"));
-                node.setAttribute("lat", e.getAttribute("y"));
+                node.setAttribute("lat", e.getAttribute("x"));
+                node.setAttribute("lon", e.getAttribute("y"));
                 nodes.appendChild(node);
             }
 
@@ -139,9 +140,11 @@ public class GeradorRede extends ExecucaoMultiEtapas {
 
             transformer.transform(domSource, streamResult);
             this.onCommandSucess("criado arquivos com sucesso");
-        } catch (ParserConfigurationException | SAXException | IOException | DOMException | TransformerException e) {
+            SimulacaoMicroscopica.getInstance().log("Arquivo de entrada copiado.");
+        } catch (Exception e) {
+            this.notificaErroExecucaoComando((LogException) e);
+            SimulacaoMicroscopica.getInstance().log("ERRO na criação do arquivo de entrada");
         }
-        SimulacaoMicroscopica.getInstance().log("Arquivo de entrada copiado.");
 
     }
 
@@ -162,8 +165,8 @@ public class GeradorRede extends ExecucaoMultiEtapas {
                 Element e = (Element) nodesList.item(i);
                 Element node = document.createElement("node");
                 node.setAttribute("id", e.getAttribute("id"));
-                node.setAttribute("lon", e.getAttribute("lon"));
-                node.setAttribute("lat", e.getAttribute("lat"));
+                node.setAttribute("x", e.getAttribute("lat"));
+                node.setAttribute("y", e.getAttribute("lon"));
                 root.appendChild(node);
             }
 
@@ -174,10 +177,12 @@ public class GeradorRede extends ExecucaoMultiEtapas {
                     + File.separator + "nodes.nod.xml"));
             transformer.transform(domSource, streamResult);
             this.onCommandSucess("criado arquivo node com sucesso");
+            SimulacaoMicroscopica.getInstance().log("Arquivo de nodos criado.");
         } catch (Exception e) {
-            e.printStackTrace();
+            this.notificaErroExecucaoComando((LogException) e);
+            SimulacaoMicroscopica.getInstance().log("ERRO na criação de nodos");
         }
-        SimulacaoMicroscopica.getInstance().log("Arquivo de nodos criado.");
+
     }
 
     private void criarArquivoEdge() {
@@ -216,10 +221,12 @@ public class GeradorRede extends ExecucaoMultiEtapas {
             StreamResult streamResult = new StreamResult(new File(this.pastaSimulacao.getAbsolutePath() + File.separator + "edges.edg.xml"));
             transformer.transform(domSource, streamResult);
             this.onCommandSucess("criado arquivo edges com sucesso");
+            SimulacaoMicroscopica.getInstance().log("Arquivo de edges criado.");
         } catch (Exception e) {
-            e.printStackTrace();
+            this.notificaErroExecucaoComando((LogException) e);
+            SimulacaoMicroscopica.getInstance().log("Erro na criação de edges");
         }
-        SimulacaoMicroscopica.getInstance().log("Arquivo de edges criado.");
+
     }
 
     /**
@@ -235,7 +242,7 @@ public class GeradorRede extends ExecucaoMultiEtapas {
         );
         terminal.start();
         SimulacaoMicroscopica.getInstance().log("Arquivo de rede de tráfego gerado.");
-        this.onCommandSucess("criado arquivo de rede com sucesso");
+
     }
 
     /**
@@ -252,23 +259,24 @@ public class GeradorRede extends ExecucaoMultiEtapas {
         );
         terminal.start();
         SimulacaoMicroscopica.getInstance().log("Arquivo de pontos de interesse gerado.");
-        this.onCommandSucess("criado arquivo de pontos de interesse com sucesso");
     }
 
     /**
      * Cria o arquivo de trafégo. Artigo p.21 "3.3.1 Specifying Random Trafﬁc"
      */
     private void criarArquivoDeTrafego() {
-        SimulacaoMicroscopica.getInstance().log("Iniciando geração de arquivo de trafégo.");
-        //TODO esse comando nao esta funcionando no meu computador(bruno)
+
+        SimulacaoMicroscopica.getInstance().log("Iniciando geração de arquivo de tráfego.");
+        //TODO esse comando nao esta funcionando no meu computador(bruno, windows)
+        //TODO adicionar o py antes do sumo_home e colocar aspas
+
         Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
-                "%SUMO_HOME%" + File.separator + "tools" + File.separator + "randomTrips.py --net-file="
+                "py \"%SUMO_HOME%" + File.separator + "tools" + File.separator + "randomTrips.py\" --net-file="
                 + this.pastaSimulacao.getAbsolutePath() + File.separator + "rede.net.xml --end=50 --route-file="
                 + this.pastaSimulacao.getAbsolutePath() + File.separator + "rotas.rou.xml"
         );
         terminal.start();
-        SimulacaoMicroscopica.getInstance().log("Arquivo de trafégo gerado.");
-        this.onCommandSucess("criado arquivo de trafego com sucesso");
+        SimulacaoMicroscopica.getInstance().log("Arquivo de tráfego gerado.");
     }
 
     /**
@@ -359,8 +367,10 @@ public class GeradorRede extends ExecucaoMultiEtapas {
 
             transformer.transform(domSource, streamResult);
             this.notificaSucessoExecucaoComando("\nArquivo de simulação gerado.\n");
+            SimulacaoMicroscopica.getInstance().log("Arquivo de simulação gerado.");
         } catch (ParserConfigurationException | TransformerException ex) {
             this.notificaErroExecucaoComando(new ErroGeracaoArquivoXML(ex));
+            SimulacaoMicroscopica.getInstance().log("Erro na geração de arquivo de trafégo");
         }
     }
 

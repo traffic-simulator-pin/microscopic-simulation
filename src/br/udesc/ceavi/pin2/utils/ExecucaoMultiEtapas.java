@@ -67,6 +67,7 @@ public abstract class ExecucaoMultiEtapas implements Runnable, ShellListener{
      * @param retorno 
      */
     protected synchronized void notificaSucessoExecucaoComando(String retorno){
+
         this.retorno += retorno;
         if(this.etapaAtual < this.getTotalEtapas()){
             this.etapaAtual++;
