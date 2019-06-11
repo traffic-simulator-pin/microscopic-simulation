@@ -94,7 +94,8 @@ public class PainelInicial extends JPanel implements ObservadorInicial{
     public void erroGeracaoRede(LogException ex) {
         ex.generateLog();
         JOptionPane.showMessageDialog(this, "Houve um erro ao iniciar a simulação:\n" + ex.getMessage());
-        this.painelAcoes.desabilitaAcao("iniciar");
+        this.painelAcoes.habilitaAcao("iniciar");
+        this.painelConfig.habilitaConfiguracoes();
     }
 
 }
