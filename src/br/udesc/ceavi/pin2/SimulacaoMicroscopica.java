@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -40,6 +41,7 @@ public class SimulacaoMicroscopica {
     private String workspaceFolder;
     private BufferedWriter geradorLogs;
     private BufferedWriter geradorLogsErros;
+    private Map<String, String> configuracoes;
 
     /**
      * Cria uma nova instância para a simulação microscópica.
@@ -78,11 +80,11 @@ public class SimulacaoMicroscopica {
     /**
      * Inicia a simulação com base nos dados fornecidos.
      *
-     * @param dadosSimulacao
      * @param configuracoes
      */
-    public void iniciaSimulacao(Object dadosSimulacao, Object configuracoes) {
+    public void iniciaSimulacao(Map<String, String> configuracoes) {
         this.log("Iniciando simulação.");
+        this.configuracoes = configuracoes;
         this.frameAplicacao.carregaTelaExecucaoSimulacao();
     }
 
@@ -90,6 +92,7 @@ public class SimulacaoMicroscopica {
      * Termina a execução da simulação atual.
      */
     public void fechaSimulacao() {
+        this.configuracoes = null;
         this.ocultaDetalhes();
         this.setWorkspaceFolder(null);
         this.iniciaAplicacao();
@@ -158,6 +161,14 @@ public class SimulacaoMicroscopica {
             // TODO lançar excessão de que o sistema não oferece suporte ao shell.
         }
         return this.shellCommand;
+    }
+
+    /**
+     * Retorna as configurações da simulação.
+     * @return 
+     */
+    public Map<String, String> getConfiguracoes() {
+        return configuracoes;
     }
 
     /**

@@ -27,7 +27,7 @@ public class FramePrincipal extends JFrame{
      */
     private void iniciaPropriedadesJanela(){
         this.setBackground(SimulacaoMicroscopica.COR_FUNDO);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setResizable(false);
     }
     

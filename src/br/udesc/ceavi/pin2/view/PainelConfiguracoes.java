@@ -1,17 +1,22 @@
 package br.udesc.ceavi.pin2.view;
 
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
+import br.udesc.ceavi.pin2.exceptions.CampoDesconhecidoException;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.text.NumberFormatter;
 
 /**
  * Painel para realizar a configuração dos dados da simulação.
@@ -48,12 +53,26 @@ public class PainelConfiguracoes extends JPanel{
         JLabel titulo = new JLabel("Propriedades da Simulação");
         titulo.setFont(new Font(titulo.getFont().getName(), Font.BOLD, 12));
         JComboBox<String> densidade = new JComboBox<>(new String[] { "1000", "500", "100", "50" });
-        densidade.setSelectedItem("50%");
+        densidade.setSelectedItem("500");
         JComboBox<String> velocidade = new JComboBox<>(new String[] { "200", "100", "50", "25" });
-        velocidade.setSelectedItem("100%");
+        velocidade.setSelectedItem("100");
+        JFormattedTextField porta = this.getConfiguracaoPorta();
+        porta.setText("6060");
+        porta.setPreferredSize(new Dimension(100, 10));
         this.add(titulo);
         this.add(this.criaPainelConfiguracao("densidade", "Densidade",  densidade, 25));
         this.add(this.criaPainelConfiguracao("velocidade", "Velocidade", velocidade, 25));
+        this.add(this.criaPainelConfiguracao("porta", "Porta", porta, 25));
+    }
+    
+    private JFormattedTextField getConfiguracaoPorta(){
+        NumberFormat format = NumberFormat.getInstance();
+        NumberFormatter formatter = new NumberFormatter(format);
+        formatter.setValueClass(Integer.class);
+        formatter.setMinimum(1000);
+        formatter.setMaximum(9999);
+        formatter.setAllowsInvalid(false);
+        return new JFormattedTextField(format);
     }
     
     /**
@@ -108,6 +127,28 @@ public class PainelConfiguracoes extends JPanel{
         }).map((entry) -> entry.getValue()).forEachOrdered((value) -> {
             value.setEnabled(true);
         });
+    }
+    
+    public Map<String, String> getAllConfiguracoes() throws CampoDesconhecidoException{
+        Map<String, String> configuracao = new HashMap<>();
+        for (Map.Entry<String, JComponent> entry : this.configuracoes.entrySet()) {
+            String valor          = "";
+            String key            = entry.getKey();
+            JComponent componente = entry.getValue();
+            switch(componente.getClass().getCanonicalName()){
+                case "javax.swing.JComboBox":
+                    valor = ((String)((JComboBox<String>) componente).getSelectedItem());
+                    break;
+                case "javax.swing.JTextField":
+                case "javax.swing.JFormattedTextField":
+                    valor = ((JTextField) componente).getText();
+                    break;
+                default:
+                    throw new CampoDesconhecidoException(componente);
+            }
+            configuracao.put(key, valor);
+        }
+        return configuracao;
     }
     
 }

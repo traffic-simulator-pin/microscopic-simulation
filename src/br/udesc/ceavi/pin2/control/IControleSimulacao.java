@@ -1,5 +1,7 @@
 package br.udesc.ceavi.pin2.control;
 
+import br.udesc.ceavi.pin2.exceptions.LogException;
+
 /**
  * Interface para realizar o controle da simulação.
  * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
@@ -22,5 +24,11 @@ public interface IControleSimulacao {
      * @param observador 
      */
     public void desanexaObservador(ObservadorSimulacao observador);
+    
+    /**
+     * Inicia a Simulação.
+     * @throws LogException 
+     */
+    public void iniciaSimulacao() throws LogException;
     
 }

@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.swing.SwingUtilities;
 import org.apache.commons.io.FilenameUtils;
 
@@ -61,7 +62,7 @@ public class ControleInicial implements IControleInicial {
     /**
      * {@inheritdoc}
      */
-    public void iniciaSimulacao() throws LogException{
+    public void iniciaSimulacao(Map<String, String> configuracoes) throws LogException{
         SimulacaoMicroscopica.getInstance().log("Iniciando processo de simulação.");
         this.notificaInicioGeracaoRede();
         this.criaPastaTemporariaArquivo();
@@ -70,7 +71,7 @@ public class ControleInicial implements IControleInicial {
             if(this.realizaGeracaoDados()){
                 SimulacaoMicroscopica.getInstance().log("Retorno:\n" + this.geradorDados.getRetorno());
                 this.notificaSucessoGeracaoRede();
-                SimulacaoMicroscopica.getInstance().iniciaSimulacao(null, null);
+                SimulacaoMicroscopica.getInstance().iniciaSimulacao(configuracoes);
             }
             else {
                 this.notificaErroGeracaoRede(this.geradorDados.getErro());

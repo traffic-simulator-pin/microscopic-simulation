@@ -4,6 +4,8 @@ import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.control.ControleDetalhes;
 import br.udesc.ceavi.pin2.control.IControleDetalhes;
 import br.udesc.ceavi.pin2.control.IControleSimulacao;
+import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
+import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
@@ -15,7 +17,7 @@ import javax.swing.SwingUtilities;
  * Frame com os detalhes da simulação.
  * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
-public class FrameDetalhes extends JFrame{
+public class FrameDetalhes extends JFrame implements ObservadorSimulacao{
     
     private IControleDetalhes controller;
     private JPanel            painelDetalhes;
@@ -63,19 +65,7 @@ public class FrameDetalhes extends JFrame{
         this.painelDetalhes.setBorder(BorderFactory.createLineBorder(SimulacaoMicroscopica.COR_BORDA, 2));
         this.painelDetalhes.setLayout(new BorderLayout(0, 0));
         this.painelDados = new PainelDados();
-        // TODO REMOVER
-        this.painelDados.adicionaDados("Teste1", "Teste<br/><ul><li>Teste</li><li>Teste</li></ul>");
-        this.painelDados.adicionaDados("Teste2", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
+        this.painelDados.adicionaDados("Etapa", "Iniciada Simulação.");
         this.painelAcoes = new PainelAcoes();
         this.painelDetalhes.add(painelDados, BorderLayout.CENTER);
         this.painelDetalhes.add(painelAcoes, BorderLayout.SOUTH);
@@ -88,6 +78,20 @@ public class FrameDetalhes extends JFrame{
      */
     public void carregaDetalhes(IControleSimulacao controller){
         this.controller.setControlerSimulacao(controller);
+    }
+
+    @Override
+    public void erroExecucaoSimulacao(ErroExecucaoCommando ex) {}
+
+    @Override
+    public void sucessoExecucaoSimulacao(){}
+
+    @Override
+    public void entradaTraCI(String entrada) {
+        this.painelDados.adicionaDados("Entrada TraCI", entrada);
+        SwingUtilities.invokeLater(() -> {
+            this.repaint();
+        });
     }
     
 }

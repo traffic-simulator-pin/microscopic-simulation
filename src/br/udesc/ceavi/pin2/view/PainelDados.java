@@ -1,6 +1,8 @@
 package br.udesc.ceavi.pin2.view;
 
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
+import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
+import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
