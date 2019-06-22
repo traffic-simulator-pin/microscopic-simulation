@@ -1,13 +1,16 @@
 package br.udesc.ceavi.pin2.control;
 
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
+import br.udesc.ceavi.pin2.control.traci.ITraCIAdapter;
+import br.udesc.ceavi.pin2.control.traci.TraCIObserver;
+import br.udesc.ceavi.pin2.control.traci.TraasAdapter;
+import br.udesc.ceavi.pin2.control.traci.Veiculo;
 import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
+import br.udesc.ceavi.pin2.exceptions.ErroExecucaoTraCI;
 import br.udesc.ceavi.pin2.exceptions.ErroInicioTraCI;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 import br.udesc.ceavi.pin2.utils.shell.ShellListener;
-import it.polito.appeal.traci.SumoTraciConnection;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +19,12 @@ import java.util.Map;
  * Controlador para realizar a execução da simulação.
  * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
-public class ControleSimulacao implements IControleSimulacao, ShellListener{
-    
-    private static final int NUMERO_MAXIMO_TENTATIVAS_TRACI = 10;
+public class ControleSimulacao implements IControleSimulacao, ShellListener, TraCIObserver{
     
     private final List<ObservadorSimulacao> observadores;
     private int portaSumo;
+    private boolean logaDadosVeiculos;
+    private ITraCIAdapter sumo;
     private StringBuilder detalhesExecucao;
     
     /**
@@ -40,7 +43,7 @@ public class ControleSimulacao implements IControleSimulacao, ShellListener{
         SimulacaoMicroscopica.getInstance().log("Iniciando execução da Simulação.");
         String configuracoes = this.getConfiguracoesFormatadas();
         Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
-            "sumo-gui --game --game.mode tls " + configuracoes +
+            "sumo-gui --game --game.mode tls --start " + configuracoes +
             " -c " +SimulacaoMicroscopica.getInstance().trataEnderecoArquivo(new File(SimulacaoMicroscopica.getInstance().getWorkspaceFolder()).getAbsolutePath() + "/simulacao.sumocfg")  
         );
         terminal.start();
@@ -51,25 +54,9 @@ public class ControleSimulacao implements IControleSimulacao, ShellListener{
     }
 
     private void iniciaTraCI() throws ErroInicioTraCI {
-        int tentativa            = 0;
-        Exception ultErro        = null;
-        SumoTraciConnection sumo = null;
-        while(tentativa < NUMERO_MAXIMO_TENTATIVAS_TRACI && sumo == null){
-            try {
-                sumo = new SumoTraciConnection(this.portaSumo);
-            } catch (IOException | InterruptedException ex) {
-                ultErro = ex;
-            }
-        }
-        if(sumo == null){
-            throw new ErroInicioTraCI(ultErro);
-        }
-        sumo.addOption("start", "1"); // auto-run on GUI show
-        try {
-            sumo.runServer();
-        } catch (IOException ex) {
-            throw new ErroInicioTraCI(ex);
-        }
+        this.sumo = new TraasAdapter(this.portaSumo);
+        this.sumo.addObservador(this);
+        this.sumo.begin();
     }
     
     private String getConfiguracoesFormatadas(){
@@ -85,6 +72,9 @@ public class ControleSimulacao implements IControleSimulacao, ShellListener{
                     this.portaSumo = Integer.parseInt(value);
                     config.append("--remote-port ").append(value);
                     config.append(" --num-clients 1");
+                    break;
+                case "logDadosVeiculos":
+                    this.logaDadosVeiculos = value.equals("1");
                     break;
                 default:
                     break;
@@ -132,6 +122,30 @@ public class ControleSimulacao implements IControleSimulacao, ShellListener{
         SimulacaoMicroscopica.getInstance().log("Retorno:\n" + retorno);
         this.observadores.forEach((observador) -> {
             observador.sucessoExecucaoSimulacao();
+        });
+    }
+
+    @Override
+    public void onErroTraCI(ErroExecucaoTraCI ex) {
+        this.observadores.forEach((observador) -> {
+            observador.erroExecucaoSimulacao(ex);
+        });
+    }
+
+    @Override
+    public void onNovoVeiculo(Veiculo veiculo) {
+        this.observadores.forEach((observador) -> {
+            observador.entradaTraCI("Novo veículo: " + veiculo.getIdVeiculo());
+        });
+    }
+
+    @Override
+    public void onDadoVeiculo(String dado, Veiculo veiculo) {
+        if(!this.logaDadosVeiculos){
+            return;
+        }
+        this.observadores.forEach((observador) -> {
+            observador.logTraCI("Recebeu " + dado + " do Veículo: " + veiculo.getIdVeiculo());
         });
     }
     

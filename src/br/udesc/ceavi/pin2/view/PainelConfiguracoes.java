@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
@@ -59,10 +60,12 @@ public class PainelConfiguracoes extends JPanel{
         JFormattedTextField porta = this.getConfiguracaoPorta();
         porta.setText("6060");
         porta.setPreferredSize(new Dimension(100, 10));
+        JCheckBox logDadosVei = new JCheckBox();
         this.add(titulo);
         this.add(this.criaPainelConfiguracao("densidade", "Densidade",  densidade, 25));
         this.add(this.criaPainelConfiguracao("velocidade", "Velocidade", velocidade, 25));
         this.add(this.criaPainelConfiguracao("porta", "Porta", porta, 25));
+        this.add(this.criaPainelConfiguracao("logDadosVeiculos", "Gerar log de Dados dos Veículos", logDadosVei, 20));
     }
     
     private JFormattedTextField getConfiguracaoPorta(){
@@ -142,6 +145,9 @@ public class PainelConfiguracoes extends JPanel{
                 case "javax.swing.JTextField":
                 case "javax.swing.JFormattedTextField":
                     valor = ((JTextField) componente).getText();
+                    break;
+                case "javax.swing.JCheckBox":
+                    valor = ((JCheckBox) componente).isSelected() ? "1" : "0";
                     break;
                 default:
                     throw new CampoDesconhecidoException(componente);

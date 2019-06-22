@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 public class PainelDados extends JPanel{
     
     private JPanel panelDados;
+    private JScrollPane paneDados;
 
     /**
      * Cria um novo painel para conter os dados da simulação.
@@ -51,7 +52,8 @@ public class PainelDados extends JPanel{
         this.panelDados.setBackground(SimulacaoMicroscopica.COR_FUNDO);
         this.panelDados.setLayout(new BoxLayout(this.panelDados, BoxLayout.Y_AXIS));
         this.add(titulo);
-        this.add(new JScrollPane(this.panelDados));
+        this.paneDados = new JScrollPane(this.panelDados);
+        this.add(this.paneDados);
     }
     
     /**
@@ -69,6 +71,7 @@ public class PainelDados extends JPanel{
         panel.add(labelTitulo, BorderLayout.WEST);
         panel.add(labelDados,  BorderLayout.CENTER);
         this.panelDados.add(panel);
+        this.paneDados.getVerticalScrollBar().setValue(this.paneDados.getVerticalScrollBar().getMaximum());
     }
     
     /**

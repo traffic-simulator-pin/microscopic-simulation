@@ -6,6 +6,7 @@ import br.udesc.ceavi.pin2.control.IControleDetalhes;
 import br.udesc.ceavi.pin2.control.IControleSimulacao;
 import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
 import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
+import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
@@ -78,20 +79,29 @@ public class FrameDetalhes extends JFrame implements ObservadorSimulacao{
      */
     public void carregaDetalhes(IControleSimulacao controller){
         this.controller.setControlerSimulacao(controller);
+        this.controller.getControllerSimulacao().anexaObservador(this);
+    }
+
+    public void ocultaDetalhes() {
+        this.controller.getControllerSimulacao().desanexaObservador(this);
+        this.controller.setControlerSimulacao(null);
     }
 
     @Override
-    public void erroExecucaoSimulacao(ErroExecucaoCommando ex) {}
+    public void erroExecucaoSimulacao(LogException ex) {}
 
     @Override
     public void sucessoExecucaoSimulacao(){}
 
     @Override
     public void entradaTraCI(String entrada) {
-        this.painelDados.adicionaDados("Entrada TraCI", entrada);
         SwingUtilities.invokeLater(() -> {
-            this.repaint();
+            this.painelDados.adicionaDados("Entrada TraCI: ", entrada);
+            this.revalidate();
         });
     }
+
+    @Override
+    public void logTraCI(String entrada) {}
     
 }

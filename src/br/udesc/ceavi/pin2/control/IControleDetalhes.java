@@ -12,4 +12,10 @@ public interface IControleDetalhes {
      */
     public void setControlerSimulacao(IControleSimulacao controle);
     
+    /**
+     * Retorna o controle usado para observar os detalhes da simulação.
+     * @return 
+     */
+    public IControleSimulacao getControllerSimulacao();
+    
 }

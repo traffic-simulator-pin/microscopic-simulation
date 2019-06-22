@@ -12,5 +12,10 @@ public class ControleDetalhes implements IControleDetalhes{
     public void setControlerSimulacao(IControleSimulacao controle) {
         this.simulacao = controle;
     }
+
+    @Override
+    public IControleSimulacao getControllerSimulacao() {
+        return simulacao;
+    }
     
 }

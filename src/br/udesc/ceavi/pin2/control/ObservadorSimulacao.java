@@ -1,6 +1,6 @@
 package br.udesc.ceavi.pin2.control;
 
-import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
+import br.udesc.ceavi.pin2.exceptions.LogException;
 
 /**
  * Interface para observadores relacionados a execução da simulação.
@@ -8,10 +8,12 @@ import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
  */
 public interface ObservadorSimulacao {
 
-    public void erroExecucaoSimulacao(ErroExecucaoCommando ex);
+    public void erroExecucaoSimulacao(LogException ex);
 
     public void sucessoExecucaoSimulacao();
     
     public void entradaTraCI(String entrada);
+
+    public void logTraCI(String entrada);
     
 }

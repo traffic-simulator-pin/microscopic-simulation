@@ -41,7 +41,9 @@ public class SimulacaoMicroscopica {
     private String workspaceFolder;
     private BufferedWriter geradorLogs;
     private BufferedWriter geradorLogsErros;
+    private BufferedWriter geradorLogsTraCI;
     private Map<String, String> configuracoes;
+    private boolean executando;
 
     /**
      * Cria uma nova instância para a simulação microscópica.
@@ -84,6 +86,7 @@ public class SimulacaoMicroscopica {
      */
     public void iniciaSimulacao(Map<String, String> configuracoes) {
         this.log("Iniciando simulação.");
+        this.executando = true;
         this.configuracoes = configuracoes;
         this.frameAplicacao.carregaTelaExecucaoSimulacao();
     }
@@ -93,6 +96,7 @@ public class SimulacaoMicroscopica {
      */
     public void fechaSimulacao() {
         this.configuracoes = null;
+        this.executando = false;
         this.ocultaDetalhes();
         this.setWorkspaceFolder(null);
         this.iniciaAplicacao();
@@ -114,6 +118,7 @@ public class SimulacaoMicroscopica {
      * Oculta a janela de detalhes da simulação.
      */
     public void ocultaDetalhes() {
+        this.frameDetalhes.ocultaDetalhes();
         this.frameDetalhes.setVisible(false);
     }
 
@@ -172,22 +177,34 @@ public class SimulacaoMicroscopica {
     }
 
     /**
+     * Retorna se a simulação está executando.
+     * @return 
+     */
+    public boolean isExecutando() {
+        return executando;
+    }
+
+    /**
      * Recria os arquivos de geração de logs de erros.
      */
     private void recriarGeradorLogs() {
         String nomeLog;
         String nomeErro;
+        String nomeTraCI;
         if (this.workspaceFolder != null && !this.workspaceFolder.isEmpty()) {
             new File(trataEnderecoArquivo(this.workspaceFolder + "/logs")).mkdir();
             nomeLog = trataEnderecoArquivo(this.workspaceFolder + "/logs/" + "execution.log");
             nomeErro = trataEnderecoArquivo(this.workspaceFolder + "/logs/" + "errors.log");
+            nomeTraCI = trataEnderecoArquivo(this.workspaceFolder + "/logs/" + "traCI.log");
         } else {
             nomeLog = this.getNomeArquivoLogSistema();
             nomeErro = nomeLog;
+            nomeTraCI = nomeLog;
         }
         try {
             this.geradorLogs = new BufferedWriter(new FileWriter(nomeLog, true));
             this.geradorLogsErros = new BufferedWriter(new FileWriter(nomeErro, true));
+            this.geradorLogsTraCI = new BufferedWriter(new FileWriter(nomeTraCI, true));
         } catch (IOException ex) {
             System.out.println("Não foi possível gerar o arquivo de log: " + ex.getMessage());
         }
@@ -235,7 +252,7 @@ public class SimulacaoMicroscopica {
     private final DateFormat dateFormatter = new SimpleDateFormat();
 
     public enum LOG_TYPE {
-        EXECUTION, WARNING, ERROR
+        EXECUTION, WARNING, ERROR, TRACI
     }
 
     /**
@@ -244,7 +261,7 @@ public class SimulacaoMicroscopica {
      * @param type
      * @param message
      */
-    protected void log(LOG_TYPE type, String message) {
+    public void log(LOG_TYPE type, String message) {
         message = message.trim();
         message = dateFormatter.format(new Date()) + " - " + message;
         switch (type) {
@@ -256,14 +273,22 @@ public class SimulacaoMicroscopica {
                 break;
         }
         try {
-            if (type == LOG_TYPE.ERROR) {
-                geradorLogsErros.write(message);
-                geradorLogsErros.newLine();
-                geradorLogsErros.flush();
-            } else {
-                geradorLogs.write(message);
-                geradorLogs.newLine();
-                geradorLogs.flush();
+            switch (type){
+                case ERROR:
+                    geradorLogsErros.write(message);
+                    geradorLogsErros.newLine();
+                    geradorLogsErros.flush();
+                    break;
+                case TRACI:
+                    geradorLogsTraCI.write(message);
+                    geradorLogsTraCI.newLine();
+                    geradorLogsTraCI.flush();
+                    break;
+                default:
+                    geradorLogs.write(message);
+                    geradorLogs.newLine();
+                    geradorLogs.flush();
+                    break;
             }
         } catch (IOException ex) {
             System.out.println("Não foi possível escrever ao arquivo de logs.");

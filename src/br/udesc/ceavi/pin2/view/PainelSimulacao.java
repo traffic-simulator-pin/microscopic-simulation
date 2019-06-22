@@ -4,7 +4,6 @@ import br.udesc.ceavi.pin2.control.IControleSimulacao;
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.control.ControleSimulacao;
 import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
-import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -63,7 +62,7 @@ public class PainelSimulacao extends JPanel implements ObservadorSimulacao{
     }
 
     @Override
-    public void erroExecucaoSimulacao(ErroExecucaoCommando ex) {
+    public void erroExecucaoSimulacao(LogException ex) {
         ex.generateLog();
         JOptionPane.showMessageDialog(this, "Houve um erro ao iniciar a simulação:\n" + ex.getMessage());
     }
@@ -72,5 +71,12 @@ public class PainelSimulacao extends JPanel implements ObservadorSimulacao{
     public void sucessoExecucaoSimulacao() {}
 
     @Override
-    public void entradaTraCI(String entrada) {}
+    public void entradaTraCI(String entrada) {
+        SimulacaoMicroscopica.getInstance().log(SimulacaoMicroscopica.LOG_TYPE.TRACI, entrada);
+    }
+
+    @Override
+    public void logTraCI(String entrada) {
+        SimulacaoMicroscopica.getInstance().log(SimulacaoMicroscopica.LOG_TYPE.TRACI, entrada);
+    }
 }
