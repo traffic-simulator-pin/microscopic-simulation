@@ -4,6 +4,7 @@ import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.exceptions.ErroGeracaoArquivoXML;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.io.File;
+import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,20 +29,17 @@ public class GeradorRede extends ExecucaoMultiEtapas {
     private File arquivoSimulacao;
     private final File pastaSimulacao;
     private final String densidade;
-    private final String velocidade;
 
     /**
      * Cria um novo controle para geração do arquivo da rede
      *
      * @param arquivoSimulacao
-     * @param densidade
-     * @param velocidade
+     * @param configuracoes
      */
-    public GeradorRede(File arquivoSimulacao, String densidade, String velocidade) {
+    public GeradorRede(File arquivoSimulacao, Map<String, String> configuracoes) {
         this.arquivoSimulacao = arquivoSimulacao;
         this.pastaSimulacao = new File(SimulacaoMicroscopica.getInstance().getWorkspaceFolder());
-        this.densidade = densidade;
-        this.velocidade = velocidade;
+        this.densidade = configuracoes.get("densidade");
     }
 
     /**
@@ -349,9 +347,6 @@ public class GeradorRede extends ExecucaoMultiEtapas {
 
             Element additional = document.createElement("additional");
             Element type = document.createElement("vType");
-            Attr maxSpeed = document.createAttribute("maxSpeed");
-            maxSpeed.setValue(velocidade);
-            type.setAttributeNode(maxSpeed);
 
             Attr vClass = document.createAttribute("vClass");
             vClass.setValue("car");

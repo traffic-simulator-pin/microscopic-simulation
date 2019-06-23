@@ -27,7 +27,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  *
  * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
-public class SimulacaoMicroscopica {
+public class SimulacaoMicroscopica implements Runnable{
 
     public static final String NOME_APLICACAO = "Simulação Microscópica - Projeto Integrador";
     public static final String EXTENSAO_ARQUIVO = "xml";
@@ -259,6 +259,11 @@ public class SimulacaoMicroscopica {
     }
 
     private final DateFormat dateFormatter = new SimpleDateFormat();
+
+    @Override
+    public void run() {
+        SimulacaoMicroscopica.getInstance().iniciaAplicacao();
+    }
 
     public enum LOG_TYPE {
         EXECUTION, WARNING, ERROR, TRACI

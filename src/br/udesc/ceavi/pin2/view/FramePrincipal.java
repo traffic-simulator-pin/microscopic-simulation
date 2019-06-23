@@ -1,9 +1,7 @@
 package br.udesc.ceavi.pin2.view;
 
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
-import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
 import java.awt.Dimension;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -14,7 +12,7 @@ import javax.swing.event.InternalFrameEvent;
  * Tela Principal da aplicação.
  * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
-public class FramePrincipal extends JInternalFrame implements ObservadorSimulacao {
+public class FramePrincipal extends JInternalFrame {
 
     /**
      * Cria uma nova tela principal para a aplicação.
@@ -24,14 +22,14 @@ public class FramePrincipal extends JInternalFrame implements ObservadorSimulaca
         SwingUtilities.invokeLater(() -> {
             this.iniciaPropriedadesJanela();
         });
-//        addInternalFrameListener(new InternalFrameAdapter(){
-//            @Override
-//            public void internalFrameClosing(InternalFrameEvent e) {
-//                if(SimulacaoMicroscopica.getInstance().isExecutando()){
-//                    SimulacaoMicroscopica.getInstance().fechaSimulacao();
-//                }
-//            }
-//        });
+        this.addInternalFrameListener(new InternalFrameAdapter(){
+            @Override
+            public void internalFrameClosing(InternalFrameEvent e) {
+                if(SimulacaoMicroscopica.getInstance().isExecutando()){
+                    SimulacaoMicroscopica.getInstance().fechaSimulacao();
+                }
+            }
+        });
     }
     
     /**
