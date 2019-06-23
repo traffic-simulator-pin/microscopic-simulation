@@ -1,5 +1,6 @@
 package br.udesc.ceavi.pin2.control.traci;
 
+import br.udesc.ceavi.pin2.utils.PosicaoVeiculo;
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.exceptions.ErroExecucaoTraCI;
 import br.udesc.ceavi.pin2.exceptions.ErroInicioTraCI;

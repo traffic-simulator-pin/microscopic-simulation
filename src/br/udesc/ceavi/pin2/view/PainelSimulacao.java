@@ -4,12 +4,18 @@ import br.udesc.ceavi.pin2.control.IControleSimulacao;
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.control.ControleSimulacao;
 import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
+import br.udesc.ceavi.pin2.control.traci.Veiculo;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 /**
  * Painel para a tela de simulação da aplicação.
@@ -19,6 +25,7 @@ public class PainelSimulacao extends JPanel implements ObservadorSimulacao{
     
     private IControleSimulacao  controller;
     private PainelConfiguracoes painelConfig;
+    private JPanel              painelDadosVeiculo;
     private PainelAcoes         painelAcoes;
     
     /**
@@ -57,8 +64,13 @@ public class PainelSimulacao extends JPanel implements ObservadorSimulacao{
         this.painelAcoes.adicionaAcao("finalizar", "Finalizar Simulação", (ActionEvent e) -> {
             this.controller.finalizaSimulacao();
         });
-        this.add(painelConfig,    BorderLayout.NORTH);
-        this.add(painelAcoes,     BorderLayout.SOUTH);
+        this.painelDadosVeiculo = new JPanel();
+        this.painelDadosVeiculo.setBackground(Color.WHITE);
+        this.painelDadosVeiculo.setLayout(new BoxLayout(this.painelDadosVeiculo, BoxLayout.Y_AXIS));
+        JScrollPane paneDadosVeiculos = new JScrollPane(this.painelDadosVeiculo);
+        this.add(painelConfig,     BorderLayout.NORTH);
+        this.add(paneDadosVeiculos, BorderLayout.CENTER);
+        this.add(painelAcoes,      BorderLayout.SOUTH);
     }
 
     @Override
@@ -78,5 +90,15 @@ public class PainelSimulacao extends JPanel implements ObservadorSimulacao{
     @Override
     public void logTraCI(String entrada) {
         SimulacaoMicroscopica.getInstance().log(SimulacaoMicroscopica.LOG_TYPE.TRACI, entrada);
+    }
+
+    @Override
+    public void novoVeiculo(Veiculo veiculo) {
+        PainelDadosVeiculo painel = new PainelDadosVeiculo(veiculo);
+        this.controller.adicionaVeiculoAnalisado(painel.getControleVeiculo());
+        this.painelDadosVeiculo.add(painel);
+        SwingUtilities.invokeLater(() -> {
+            this.painelDadosVeiculo.revalidate();
+        });
     }
 }

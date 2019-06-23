@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -33,6 +34,8 @@ public class SimulacaoMicroscopica {
     public static final Color COR_FUNDO = new Color(245, 245, 245);
     public static final Color COR_BORDA = new Color(190, 190, 190);
     public static final Color COR_SEPARADOR = new Color(200, 200, 200);
+    
+    public static DecimalFormat doubleDuasCasas = new DecimalFormat("#.##");
 
     private static final OSUtils OPERATING_SYSTEM = new OSUtils();
 

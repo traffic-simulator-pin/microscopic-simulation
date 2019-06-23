@@ -31,4 +31,10 @@ public interface IControleSimulacao {
      */
     public void iniciaSimulacao() throws LogException;
     
+    /**
+     * Adiciona um controlador de veículo que está sendo analisado.
+     * @param veiculo 
+     */
+    public void adicionaVeiculoAnalisado(IControleVeiculo veiculo);
+    
 }

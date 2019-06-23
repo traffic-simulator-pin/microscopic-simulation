@@ -12,6 +12,7 @@ import br.udesc.ceavi.pin2.exceptions.LogException;
 import br.udesc.ceavi.pin2.utils.shell.ShellListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,13 +26,14 @@ public class ControleSimulacao implements IControleSimulacao, ShellListener, Tra
     private int portaSumo;
     private boolean logaDadosVeiculos;
     private ITraCIAdapter sumo;
-    private StringBuilder detalhesExecucao;
+    private Map<String, IControleVeiculo> veiculosAnalisados;
     
     /**
      * Cria um novo controlador para realizar a execução da simulação.
      */
     public ControleSimulacao() {
         this.observadores = new ArrayList<>();
+        this.veiculosAnalisados = new HashMap<>();
     }
     
     /**
@@ -131,16 +133,25 @@ public class ControleSimulacao implements IControleSimulacao, ShellListener, Tra
             observador.erroExecucaoSimulacao(ex);
         });
     }
+    
+    @Override
+    public void adicionaVeiculoAnalisado(IControleVeiculo veiculo){
+        this.veiculosAnalisados.put(veiculo.getIdVeiculo(), veiculo);
+    }
 
     @Override
     public void onNovoVeiculo(Veiculo veiculo) {
         this.observadores.forEach((observador) -> {
             observador.entradaTraCI("Novo veículo: " + veiculo.getIdVeiculo());
         });
+        this.observadores.forEach((observador) -> {
+            observador.novoVeiculo(veiculo);
+        });
     }
 
     @Override
     public void onDadoVeiculo(String dado, Veiculo veiculo) {
+        this.veiculosAnalisados.get(veiculo.getIdVeiculo()).notificaObservadoresVeiculoAlterado();
         if(!this.logaDadosVeiculos){
             return;
         }

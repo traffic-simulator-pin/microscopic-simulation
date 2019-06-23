@@ -5,7 +5,7 @@ import br.udesc.ceavi.pin2.control.ControleDetalhes;
 import br.udesc.ceavi.pin2.control.IControleDetalhes;
 import br.udesc.ceavi.pin2.control.IControleSimulacao;
 import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
-import br.udesc.ceavi.pin2.exceptions.ErroExecucaoCommando;
+import br.udesc.ceavi.pin2.control.traci.Veiculo;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -103,5 +103,8 @@ public class FrameDetalhes extends JFrame implements ObservadorSimulacao{
 
     @Override
     public void logTraCI(String entrada) {}
+
+    @Override
+    public void novoVeiculo(Veiculo veiculo) {}
     
 }

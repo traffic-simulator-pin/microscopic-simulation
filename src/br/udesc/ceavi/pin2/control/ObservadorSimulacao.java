@@ -1,5 +1,6 @@
 package br.udesc.ceavi.pin2.control;
 
+import br.udesc.ceavi.pin2.control.traci.Veiculo;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 
 /**
@@ -11,6 +12,8 @@ public interface ObservadorSimulacao {
     public void erroExecucaoSimulacao(LogException ex);
 
     public void sucessoExecucaoSimulacao();
+    
+    public void novoVeiculo(Veiculo veiculo);
     
     public void entradaTraCI(String entrada);
 

@@ -1,5 +1,6 @@
 package br.udesc.ceavi.pin2.control.traci;
 
+import br.udesc.ceavi.pin2.utils.PosicaoVeiculo;
 import java.awt.Point;
 
 /**

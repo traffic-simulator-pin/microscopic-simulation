@@ -1,4 +1,6 @@
-package br.udesc.ceavi.pin2.control.traci;
+package br.udesc.ceavi.pin2.utils;
+
+import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 
 /**
  * Representa a posição de um veículo.
@@ -24,7 +26,8 @@ public class PosicaoVeiculo {
 
     @Override
     public String toString() {
-        return "{ x: " + this.x + "; y: " + this.y + " }";
+        return "{ x: " + SimulacaoMicroscopica.doubleDuasCasas.format(this.x) +
+               "; y: " + SimulacaoMicroscopica.doubleDuasCasas.format(this.y) + " }";
     }
     
 }
