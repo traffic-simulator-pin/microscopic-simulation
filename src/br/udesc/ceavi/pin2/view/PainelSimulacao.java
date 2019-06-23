@@ -5,10 +5,10 @@ import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.control.ControleSimulacao;
 import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
 import br.udesc.ceavi.pin2.control.traci.Veiculo;
+import br.udesc.ceavi.pin2.exceptions.CampoDesconhecidoException;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -59,6 +59,11 @@ public class PainelSimulacao extends JPanel implements ObservadorSimulacao{
      */
     private void iniciaComponentes() {
         this.painelConfig    = new PainelConfiguracoes();
+        try {
+            this.painelConfig.setAllConfiguracoes(SimulacaoMicroscopica.getInstance().getConfiguracoes());
+        } catch(CampoDesconhecidoException ex){
+            JOptionPane.showMessageDialog(this, "Houve um erro ao iniciar a simulação:\n" + ex.getMessage());
+        }
         this.painelConfig.desabilitaConfiguracoes();
         this.painelAcoes     = new PainelAcoes();
         this.painelAcoes.adicionaAcao("finalizar", "Finalizar Simulação", (ActionEvent e) -> {

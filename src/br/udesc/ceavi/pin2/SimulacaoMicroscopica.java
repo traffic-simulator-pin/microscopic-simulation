@@ -86,6 +86,15 @@ public class SimulacaoMicroscopica implements Runnable{
     public void iniciaAplicacao() {
         this.frameAplicacao.carregaTelaInicialSimulacao();
         this.temp.add(this.frameAplicacao);
+        this.temp.add(this.frameDetalhes);
+    }
+    
+    /**
+     * Fecha a tela de simulação.
+     */
+    public void fechaAplicacao(){
+        this.fechaSimulacao();
+        this.instance = null;
     }
 
     /**

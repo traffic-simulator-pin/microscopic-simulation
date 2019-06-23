@@ -69,9 +69,6 @@ public class GeradorRede extends ExecucaoMultiEtapas {
             case 7:
                 this.criarArquivoSimulacao();
                 break;
-            case 8:
-                this.iniciarSimulacao();
-                break;
             default:
                 break;
         }
@@ -369,22 +366,11 @@ public class GeradorRede extends ExecucaoMultiEtapas {
         }
     }
 
-    /**
-     * Inicia a simulação
-     */
-    private void iniciarSimulacao() {
-        SimulacaoMicroscopica.getInstance().log("Iniciando a simulação");
-        Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
-                "sumo-gui --max-num-vehicles " + densidade + " -c " + this.pastaSimulacao.getAbsolutePath() + File.separator + "simulacao.sumocfg"
-        );
-        terminal.start();
-    }
-
     @Override
     /**
      * {@inheritdoc}
      */
     protected int getTotalEtapas() {
-        return 8;
+        return 7;
     }
 }

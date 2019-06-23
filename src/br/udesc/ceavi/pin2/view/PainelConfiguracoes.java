@@ -158,4 +158,30 @@ public class PainelConfiguracoes extends JPanel{
         return configuracao;
     }
     
+    public void setAllConfiguracoes(Map<String, String> configuracao) throws CampoDesconhecidoException{
+        for (Map.Entry<String, JComponent> entry : this.configuracoes.entrySet()) {
+            String valor          = "";
+            String key            = entry.getKey();
+            JComponent componente = entry.getValue();
+            if(!configuracao.containsKey(key)){
+                continue;
+            }
+            switch(componente.getClass().getCanonicalName()){
+                case "javax.swing.JComboBox":
+                    ((JComboBox<String>) componente).setSelectedItem(configuracao.get(key));
+                    break;
+                case "javax.swing.JTextField":
+                case "javax.swing.JFormattedTextField":
+                    ((JTextField) componente).setText(configuracao.get(key));
+                    break;
+                case "javax.swing.JCheckBox":
+                    ((JCheckBox) componente).setSelected(configuracao.get(key).equals("1"));
+                    break;
+                default:
+                    throw new CampoDesconhecidoException(componente);
+            }
+            configuracao.put(key, valor);
+        }
+    }
+    
 }

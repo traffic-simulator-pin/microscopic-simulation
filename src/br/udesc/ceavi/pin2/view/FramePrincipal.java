@@ -26,7 +26,7 @@ public class FramePrincipal extends JInternalFrame {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
                 if(SimulacaoMicroscopica.getInstance().isExecutando()){
-                    SimulacaoMicroscopica.getInstance().fechaSimulacao();
+                    SimulacaoMicroscopica.getInstance().fechaAplicacao();
                 }
             }
         });
