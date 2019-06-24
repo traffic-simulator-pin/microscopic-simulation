@@ -244,7 +244,7 @@ public class GeradorRede extends ExecucaoMultiEtapas {
      */
     private void criarArquivoDePOI() {
         SimulacaoMicroscopica.getInstance().log("Iniciando geração de arquivo de pontos de interesse.");
-        File polygonUtil = new File(SimulacaoMicroscopica.getInstance().trataEnderecoArquivo("src/br/udesc/ceavi/pin2/utils/osmPolyconvert.typ.xml"));
+        File polygonUtil = new File(SimulacaoMicroscopica.getInstance().trataEnderecoArquivo("src/jar/lib/osmPolyconvert.typ.xml"));
         Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
                 "polyconvert --net-file " + this.pastaSimulacao.getAbsolutePath() + File.separator
                 + "rede.net.xml --osm-files " + this.arquivoSimulacao.getAbsolutePath() + " --type-file "
