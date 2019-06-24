@@ -4,7 +4,7 @@ import br.udesc.ceavi.pin2.utils.PosicaoVeiculo;
 
 /**
  * Interface para controle de dados de um veículo.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz 
  */
 public interface IControleVeiculo {
     

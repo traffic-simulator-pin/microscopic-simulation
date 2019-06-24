@@ -4,7 +4,7 @@ import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 
 /**
  * Representa a posição de um veículo.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz 
  */
 public class PosicaoVeiculo {
     

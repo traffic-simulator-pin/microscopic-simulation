@@ -2,7 +2,7 @@ package br.udesc.ceavi.pin2.exceptions;
 
 /**
  * Excessão para erros de execução no TraCI
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz 
  */
 public class ErroExecucaoTraCI extends LogException{
 

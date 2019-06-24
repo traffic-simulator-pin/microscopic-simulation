@@ -23,7 +23,7 @@ import java.util.Observer;
 
 /**
  *
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz 
  */
 public class TraasAdapter implements ITraCIAdapter, Observer{
     

@@ -4,7 +4,7 @@ import br.udesc.ceavi.pin2.exceptions.ErroExecucaoTraCI;
 
 /**
  * Observadores do estado do TraCI.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz 
  */
 public interface TraCIObserver {
     

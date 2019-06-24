@@ -2,17 +2,18 @@ package br.udesc.ceavi.pin2.view;
 
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import java.awt.Dimension;
-import javax.swing.JInternalFrame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
  * Tela Principal da aplicação.
  * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
-public class FramePrincipal extends JInternalFrame {
+public class FramePrincipal extends JFrame {
 
     /**
      * Cria uma nova tela principal para a aplicação.
@@ -22,9 +23,9 @@ public class FramePrincipal extends JInternalFrame {
         SwingUtilities.invokeLater(() -> {
             this.iniciaPropriedadesJanela();
         });
-        this.addInternalFrameListener(new InternalFrameAdapter(){
+        this.addWindowListener(new WindowAdapter(){
             @Override
-            public void internalFrameClosing(InternalFrameEvent e) {
+            public void windowClosing(WindowEvent e) {
                 if(SimulacaoMicroscopica.getInstance().isExecutando()){
                     SimulacaoMicroscopica.getInstance().fechaAplicacao();
                 }

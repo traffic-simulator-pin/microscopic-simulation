@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * Interface para adaptadores para comunicação com o servidor TraCI.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz 
  */
 public interface ITraCIAdapter {
     

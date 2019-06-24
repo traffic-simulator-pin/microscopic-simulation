@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 /**
  * Painel para armazenar os dados de um veículo.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz 
  */
 public class PainelDadosVeiculo extends JPanel implements ObservadorVeiculo {
     

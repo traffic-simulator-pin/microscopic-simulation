@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Controlador para dados do veículo.
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz 
  */
 public class ControleVeiculo implements IControleVeiculo{
 

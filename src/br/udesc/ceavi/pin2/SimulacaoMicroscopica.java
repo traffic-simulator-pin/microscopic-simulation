@@ -8,7 +8,6 @@ import br.udesc.ceavi.pin2.exceptions.LogException;
 import br.udesc.ceavi.pin2.utils.OSUtils;
 import br.udesc.ceavi.pin2.view.FrameDetalhes;
 import br.udesc.ceavi.pin2.view.FramePrincipal;
-import br.udesc.ceavi.pin2.view.FrameTemporario;
 import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,9 +24,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 /**
  * Classe Principal da Aplicação.
  *
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz 
  */
-public class SimulacaoMicroscopica implements Runnable{
+public class SimulacaoMicroscopica{
 
     public static final String NOME_APLICACAO = "Simulação Microscópica - Projeto Integrador";
     public static final String EXTENSAO_ARQUIVO = "xml";
@@ -42,8 +41,6 @@ public class SimulacaoMicroscopica implements Runnable{
 
     private final FramePrincipal frameAplicacao;
     private final FrameDetalhes frameDetalhes;
-    //TODO trocar pelo frame principar que unirá os 4 grupos
-    private final FrameTemporario temp;
     
     private String workspaceFolder;
     private BufferedWriter geradorLogs;
@@ -58,7 +55,6 @@ public class SimulacaoMicroscopica implements Runnable{
     private SimulacaoMicroscopica() {
         this.frameAplicacao = new FramePrincipal();
         this.frameDetalhes = new FrameDetalhes();
-        this.temp = new FrameTemporario();
         File log = new File(this.getNomeArquivoLogSistema());
         if (log.exists()) {
             log.delete();
@@ -85,8 +81,6 @@ public class SimulacaoMicroscopica implements Runnable{
      */
     public void iniciaAplicacao() {
         this.frameAplicacao.carregaTelaInicialSimulacao();
-        this.temp.add(this.frameAplicacao);
-        this.temp.add(this.frameDetalhes);
     }
     
     /**
@@ -94,6 +88,8 @@ public class SimulacaoMicroscopica implements Runnable{
      */
     public void fechaAplicacao(){
         this.fechaSimulacao();
+        this.frameAplicacao.dispose();
+        this.frameDetalhes.dispose();
         this.instance = null;
     }
 
@@ -180,9 +176,7 @@ public class SimulacaoMicroscopica implements Runnable{
             this.shellCommand = new ShellCommandLinux();
         } else if (this.getOperatingSystem().isWindows()) {
             this.shellCommand = new ShellCommandWindows();
-        } else {
-            // TODO lançar excessão de que o sistema não oferece suporte ao shell.
-        }
+        } else {}
         return this.shellCommand;
     }
 
@@ -268,11 +262,6 @@ public class SimulacaoMicroscopica implements Runnable{
     }
 
     private final DateFormat dateFormatter = new SimpleDateFormat();
-
-    @Override
-    public void run() {
-        SimulacaoMicroscopica.getInstance().iniciaAplicacao();
-    }
 
     public enum LOG_TYPE {
         EXECUTION, WARNING, ERROR, TRACI

@@ -258,10 +258,7 @@ public class GeradorRede extends ExecucaoMultiEtapas {
      * Cria o arquivo de trafégo. Artigo p.21 "3.3.1 Specifying Random Trafﬁc"
      */
     private void criarArquivoDeTrafego() {
-
         SimulacaoMicroscopica.getInstance().log("Iniciando geração de arquivo de tráfego.");
-        //TODO esse comando nao esta funcionando no meu computador(bruno, windows)
-        //TODO adicionar o py antes do sumo_home e colocar aspas
 
         Thread terminal = SimulacaoMicroscopica.getInstance().getShellCommand().getNewShell(this,
                 "py \"%SUMO_HOME%" + File.separator + "tools" + File.separator + "randomTrips.py\" --net-file="

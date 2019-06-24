@@ -5,7 +5,7 @@ import javax.swing.JComponent;
 
 /**
  * Excessão para campos de configuração desconhecidos
- * @author Jeferson Penz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz 
  */
 public class CampoDesconhecidoException extends Exception{
     
