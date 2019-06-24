@@ -28,7 +28,6 @@ public class GeradorRede extends ExecucaoMultiEtapas {
 
     private File arquivoSimulacao;
     private final File pastaSimulacao;
-    private final String densidade;
 
     /**
      * Cria um novo controle para geração do arquivo da rede
@@ -39,7 +38,6 @@ public class GeradorRede extends ExecucaoMultiEtapas {
     public GeradorRede(File arquivoSimulacao, Map<String, String> configuracoes) {
         this.arquivoSimulacao = arquivoSimulacao;
         this.pastaSimulacao = new File(SimulacaoMicroscopica.getInstance().getWorkspaceFolder());
-        this.densidade = configuracoes.get("densidade");
     }
 
     /**

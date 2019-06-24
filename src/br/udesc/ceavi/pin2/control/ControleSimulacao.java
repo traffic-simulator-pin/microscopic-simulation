@@ -70,6 +70,9 @@ public class ControleSimulacao implements IControleSimulacao, ShellListener, Tra
                 case "velocidade":
                     config.append("--step-length ").append(Integer.parseInt(value) / 1000f);
                     break;
+                case "densidade":
+                    config.append("--max-num-vehicles ").append(value);
+                    break;
                 case "porta":
                     this.portaSumo = Integer.parseInt(value);
                     config.append("--remote-port ").append(value);
