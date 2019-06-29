@@ -6,7 +6,7 @@ import br.udesc.ceavi.pin2.utils.shell.ShellListener;
 
 /**
  * Classe para execução de tarefas com múltiplas etapas.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public abstract class ExecucaoMultiEtapas implements Runnable, ShellListener{
     
@@ -67,7 +67,6 @@ public abstract class ExecucaoMultiEtapas implements Runnable, ShellListener{
      * @param retorno 
      */
     protected synchronized void notificaSucessoExecucaoComando(String retorno){
-
         this.retorno += retorno;
         if(this.etapaAtual < this.getTotalEtapas()){
             this.etapaAtual++;

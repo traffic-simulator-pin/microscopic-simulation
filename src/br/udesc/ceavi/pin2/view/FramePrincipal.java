@@ -1,17 +1,19 @@
 package br.udesc.ceavi.pin2.view;
 
 import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
-import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
 import java.awt.Dimension;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 /**
  * Tela Principal da aplicação.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
-public class FramePrincipal extends JInternalFrame implements ObservadorSimulacao {
+public class FramePrincipal extends JFrame{
 
     /**
      * Cria uma nova tela principal para a aplicação.
@@ -28,7 +30,7 @@ public class FramePrincipal extends JInternalFrame implements ObservadorSimulaca
      */
     private void iniciaPropriedadesJanela(){
         this.setBackground(SimulacaoMicroscopica.COR_FUNDO);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setResizable(false);
     }
     
@@ -39,7 +41,6 @@ public class FramePrincipal extends JInternalFrame implements ObservadorSimulaca
         this.setVisible(false);
         this.setSize(new Dimension(400, 300));
         this.getContentPane().removeAll();
-       // this.setLocationRelativeTo(null);
         JPanel painelBase = new PainelInicial();
         this.setContentPane(painelBase);
         this.setVisible(true);
@@ -53,7 +54,6 @@ public class FramePrincipal extends JInternalFrame implements ObservadorSimulaca
         this.setVisible(false);
         this.setSize(new Dimension(600, 400));
         this.getContentPane().removeAll();
-       // this.setLocationRelativeTo(null);
         JPanel painelBase = new PainelSimulacao();
         this.setContentPane(painelBase);
         this.setVisible(true);

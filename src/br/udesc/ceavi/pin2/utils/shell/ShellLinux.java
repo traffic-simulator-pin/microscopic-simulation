@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 /**
  * Shell para execução de comandos no linux.
  *
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class ShellLinux extends Shell {
 

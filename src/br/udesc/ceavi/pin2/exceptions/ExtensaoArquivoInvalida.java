@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 /**
  * Representa um erro na extensão de um arquivo que tentou ser carregado.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class ExtensaoArquivoInvalida extends Exception{
     

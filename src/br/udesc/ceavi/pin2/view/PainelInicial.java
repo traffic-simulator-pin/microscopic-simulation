@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 /**
  * Painel para a tela inicial da aplicação.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class PainelInicial extends JPanel implements ObservadorInicial{
     
@@ -50,9 +50,11 @@ public class PainelInicial extends JPanel implements ObservadorInicial{
         this.painelAcoes   = new PainelAcoes();
         this.painelAcoes.adicionaAcao("iniciar", "Iniciar Simulação", (ActionEvent e) -> {
             try {
-                this.controller.iniciaSimulacao(painelConfig.getSelectedDensidade(), painelConfig.getSelectedVelocidade());
+                this.controller.iniciaSimulacao(this.painelConfig.getAllConfiguracoes());
             } catch(LogException ex){
                 ex.generateLog();
+                JOptionPane.showMessageDialog(this, "Houve um erro ao iniciar a simulação:\n" + ex.getMessage());
+            } catch(Exception ex){
                 JOptionPane.showMessageDialog(this, "Houve um erro ao iniciar a simulação:\n" + ex.getMessage());
             }
         });
@@ -92,8 +94,7 @@ public class PainelInicial extends JPanel implements ObservadorInicial{
     public void erroGeracaoRede(LogException ex) {
         ex.generateLog();
         JOptionPane.showMessageDialog(this, "Houve um erro ao iniciar a simulação:\n" + ex.getMessage());
-        this.painelAcoes.habilitaAcao("iniciar");
-        this.painelConfig.habilitaConfiguracoes();
+        this.painelAcoes.desabilitaAcao("iniciar");
     }
 
 }

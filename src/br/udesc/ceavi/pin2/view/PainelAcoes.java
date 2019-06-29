@@ -12,7 +12,7 @@ import javax.swing.border.Border;
 
 /**
  * Painel padrão para gerenciamento de ações da aplicação.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class PainelAcoes extends JPanel{
     

@@ -2,7 +2,7 @@ package br.udesc.ceavi.pin2.control;
 
 /**
  * Interface para realizar o controle dos detalhes da simulação.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public interface IControleDetalhes {
 
@@ -11,5 +11,11 @@ public interface IControleDetalhes {
      * @param controle 
      */
     public void setControlerSimulacao(IControleSimulacao controle);
+    
+    /**
+     * Retorna o controle usado para observar os detalhes da simulação.
+     * @return 
+     */
+    public IControleSimulacao getControllerSimulacao();
     
 }

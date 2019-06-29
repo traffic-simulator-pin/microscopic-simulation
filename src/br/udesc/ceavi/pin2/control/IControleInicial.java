@@ -3,10 +3,11 @@ package br.udesc.ceavi.pin2.control;
 import br.udesc.ceavi.pin2.exceptions.ExtensaoArquivoInvalida;
 import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.io.File;
+import java.util.Map;
 
 /**
  * Interface para realizar o controle da tela inicial da aplicação.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public interface IControleInicial {
     
@@ -21,7 +22,7 @@ public interface IControleInicial {
      * Ordena ao controlador para iniciar a simulação de dados com base no arquivo carregado.
      * @throws br.udesc.ceavi.pin2.exceptions.LogException
      */
-    public void iniciaSimulacao(String densidade, String velocidade) throws LogException;
+    public void iniciaSimulacao(Map<String, String> configuracoes) throws LogException;
     
     /**
      * Anexa um observador ao controlador.

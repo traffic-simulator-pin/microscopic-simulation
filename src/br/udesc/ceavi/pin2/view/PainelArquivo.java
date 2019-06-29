@@ -19,7 +19,7 @@ import java.awt.Font;
 
 /**
  * Painel para seleção do arquivo de configurações.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class PainelArquivo extends JPanel implements ObservadorInicial{
     

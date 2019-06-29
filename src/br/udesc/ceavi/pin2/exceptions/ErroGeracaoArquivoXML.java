@@ -1,10 +1,8 @@
 package br.udesc.ceavi.pin2.exceptions;
 
-import com.sun.org.apache.bcel.internal.classfile.InnerClass;
-
 /**
  * Indica algum erro na geração do arquivo XML.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class ErroGeracaoArquivoXML extends LogException{
     

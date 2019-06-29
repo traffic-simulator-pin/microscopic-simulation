@@ -8,42 +8,45 @@ import br.udesc.ceavi.pin2.exceptions.LogException;
 import br.udesc.ceavi.pin2.utils.OSUtils;
 import br.udesc.ceavi.pin2.view.FrameDetalhes;
 import br.udesc.ceavi.pin2.view.FramePrincipal;
-import br.udesc.ceavi.pin2.view.FrameTemporario;
 import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  * Classe Principal da Aplicação.
  *
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class SimulacaoMicroscopica {
 
     public static final String NOME_APLICACAO = "Simulação Microscópica - Projeto Integrador";
-    public static final String EXTENSAO_ARQUIVO = "xml";
+    public static final String EXTENSAO_ARQUIVO = "osm";
     public static final String FORMATO_DATA = "yyyy.MM.dd.HH.mm.ss";
     public static final Color COR_FUNDO = new Color(245, 245, 245);
     public static final Color COR_BORDA = new Color(190, 190, 190);
     public static final Color COR_SEPARADOR = new Color(200, 200, 200);
+    
+    public static DecimalFormat doubleDuasCasas = new DecimalFormat("#.##");
 
     private static final OSUtils OPERATING_SYSTEM = new OSUtils();
 
     private final FramePrincipal frameAplicacao;
     private final FrameDetalhes frameDetalhes;
-    //TODO trocar pelo frame principar que unirá os 4 grupos
-    private final FrameTemporario temp;
-    
     private String workspaceFolder;
     private BufferedWriter geradorLogs;
     private BufferedWriter geradorLogsErros;
+    private BufferedWriter geradorLogsTraCI;
+    private Map<String, String> configuracoes;
+    private boolean executando;
 
     /**
      * Cria uma nova instância para a simulação microscópica.
@@ -51,7 +54,6 @@ public class SimulacaoMicroscopica {
     private SimulacaoMicroscopica() {
         this.frameAplicacao = new FramePrincipal();
         this.frameDetalhes = new FrameDetalhes();
-        this.temp = new FrameTemporario();
         File log = new File(this.getNomeArquivoLogSistema());
         if (log.exists()) {
             log.delete();
@@ -78,24 +80,26 @@ public class SimulacaoMicroscopica {
      */
     public void iniciaAplicacao() {
         this.frameAplicacao.carregaTelaInicialSimulacao();
-        this.temp.add(this.frameAplicacao);
     }
 
     /**
      * Inicia a simulação com base nos dados fornecidos.
      *
-     * @param dadosSimulacao
      * @param configuracoes
      */
-    public void iniciaSimulacao(Object dadosSimulacao, Object configuracoes) {
+    public void iniciaSimulacao(Map<String, String> configuracoes) {
         this.log("Iniciando simulação.");
-       // this.temp.iniciaPropriedadesJanela();
+        this.executando = true;
+        this.configuracoes = configuracoes;
+        this.frameAplicacao.carregaTelaExecucaoSimulacao();
     }
 
     /**
      * Termina a execução da simulação atual.
      */
     public void fechaSimulacao() {
+        this.configuracoes = null;
+        this.executando = false;
         this.ocultaDetalhes();
         this.setWorkspaceFolder(null);
         this.iniciaAplicacao();
@@ -117,6 +121,7 @@ public class SimulacaoMicroscopica {
      * Oculta a janela de detalhes da simulação.
      */
     public void ocultaDetalhes() {
+        this.frameDetalhes.ocultaDetalhes();
         this.frameDetalhes.setVisible(false);
     }
 
@@ -167,22 +172,42 @@ public class SimulacaoMicroscopica {
     }
 
     /**
+     * Retorna as configurações da simulação.
+     * @return 
+     */
+    public Map<String, String> getConfiguracoes() {
+        return configuracoes;
+    }
+
+    /**
+     * Retorna se a simulação está executando.
+     * @return 
+     */
+    public boolean isExecutando() {
+        return executando;
+    }
+
+    /**
      * Recria os arquivos de geração de logs de erros.
      */
     private void recriarGeradorLogs() {
         String nomeLog;
         String nomeErro;
+        String nomeTraCI;
         if (this.workspaceFolder != null && !this.workspaceFolder.isEmpty()) {
             new File(trataEnderecoArquivo(this.workspaceFolder + "/logs")).mkdir();
             nomeLog = trataEnderecoArquivo(this.workspaceFolder + "/logs/" + "execution.log");
             nomeErro = trataEnderecoArquivo(this.workspaceFolder + "/logs/" + "errors.log");
+            nomeTraCI = trataEnderecoArquivo(this.workspaceFolder + "/logs/" + "traCI.log");
         } else {
             nomeLog = this.getNomeArquivoLogSistema();
             nomeErro = nomeLog;
+            nomeTraCI = nomeLog;
         }
         try {
             this.geradorLogs = new BufferedWriter(new FileWriter(nomeLog, true));
             this.geradorLogsErros = new BufferedWriter(new FileWriter(nomeErro, true));
+            this.geradorLogsTraCI = new BufferedWriter(new FileWriter(nomeTraCI, true));
         } catch (IOException ex) {
             System.out.println("Não foi possível gerar o arquivo de log: " + ex.getMessage());
         }
@@ -230,7 +255,7 @@ public class SimulacaoMicroscopica {
     private final DateFormat dateFormatter = new SimpleDateFormat();
 
     public enum LOG_TYPE {
-        EXECUTION, WARNING, ERROR
+        EXECUTION, WARNING, ERROR, TRACI
     }
 
     /**
@@ -239,7 +264,7 @@ public class SimulacaoMicroscopica {
      * @param type
      * @param message
      */
-    protected void log(LOG_TYPE type, String message) {
+    public void log(LOG_TYPE type, String message) {
         message = message.trim();
         message = dateFormatter.format(new Date()) + " - " + message;
         switch (type) {
@@ -251,14 +276,22 @@ public class SimulacaoMicroscopica {
                 break;
         }
         try {
-            if (type == LOG_TYPE.ERROR) {
-                geradorLogsErros.write(message);
-                geradorLogsErros.newLine();
-                geradorLogsErros.flush();
-            } else {
-                geradorLogs.write(message);
-                geradorLogs.newLine();
-                geradorLogs.flush();
+            switch (type){
+                case ERROR:
+                    geradorLogsErros.write(message);
+                    geradorLogsErros.newLine();
+                    geradorLogsErros.flush();
+                    break;
+                case TRACI:
+                    geradorLogsTraCI.write(message);
+                    geradorLogsTraCI.newLine();
+                    geradorLogsTraCI.flush();
+                    break;
+                default:
+                    geradorLogs.write(message);
+                    geradorLogs.newLine();
+                    geradorLogs.flush();
+                    break;
             }
         } catch (IOException ex) {
             System.out.println("Não foi possível escrever ao arquivo de logs.");

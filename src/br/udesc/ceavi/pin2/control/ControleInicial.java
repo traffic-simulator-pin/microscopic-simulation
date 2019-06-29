@@ -11,14 +11,14 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.swing.SwingUtilities;
 import org.apache.commons.io.FilenameUtils;
 
 /**
  * Controlador para a tela inicial da aplicação.
  *
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João
- * Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public class ControleInicial implements IControleInicial {
 
@@ -62,46 +62,43 @@ public class ControleInicial implements IControleInicial {
     /**
      * {@inheritdoc}
      */
-    public void iniciaSimulacao(String densidade, String velocidade) throws LogException {
+    public void iniciaSimulacao(Map<String, String> configuracoes) throws LogException{
         SimulacaoMicroscopica.getInstance().log("Iniciando processo de simulação.");
         this.notificaInicioGeracaoRede();
         this.criaPastaTemporariaArquivo();
-        this.geradorDados = new GeradorRede(this.arquivoSimulacao, densidade, velocidade);
+        this.geradorDados = new GeradorRede(this.arquivoSimulacao);
         SwingUtilities.invokeLater(() -> {
-            if (this.realizaGeracaoDados()) {
+            if(this.realizaGeracaoDados()){
                 SimulacaoMicroscopica.getInstance().log("Retorno:\n" + this.geradorDados.getRetorno());
                 this.notificaSucessoGeracaoRede();
-                SimulacaoMicroscopica.getInstance().iniciaSimulacao(null, null);
-            } else {
+                SimulacaoMicroscopica.getInstance().iniciaSimulacao(configuracoes);
+            }
+            else {
                 this.notificaErroGeracaoRede(this.geradorDados.getErro());
             }
         });
     }
-
+    
     /**
-     * Realiza a geração de dados de forma síncrona e retorna se a execução
-     * ocorreu com sucesso.
-     *
-     * @return
+     * Realiza a geração de dados de forma síncrona e retorna se a execução ocorreu com sucesso.
+     * @return 
      */
-    private boolean realizaGeracaoDados() {
-        if (this.geradorDados == null) {
+    private boolean realizaGeracaoDados(){
+        if(this.geradorDados == null){
             return false;
         }
         new Thread(this.geradorDados).start();
-        while (!this.geradorDados.getExecucaoFinalizada()) {
+        while(!this.geradorDados.getExecucaoFinalizada()){
             try {
                 Thread.sleep(100);
-            } catch (InterruptedException ex) {
-            }
+            } catch (InterruptedException ex) {}
         }
         return !this.geradorDados.getExecucaoErro();
     }
 
     /**
      * Realiza a criação das pastas temporárias para armazenar os arquivos.
-     *
-     * @return
+     * @return 
      */
     private void criaPastaTemporariaArquivo() throws LogException {
         SimulacaoMicroscopica.getInstance().log("Criando pasta temporária para os arquivos.");
@@ -114,7 +111,7 @@ public class ControleInicial implements IControleInicial {
         SimulacaoMicroscopica.getInstance().log("Criada pasta " + file.getAbsolutePath());
         SimulacaoMicroscopica.getInstance().setWorkspaceFolder(file.getPath());
     }
-
+    
     /**
      * Notifica os observadores que a rede está sendo carregada.
      */
@@ -141,6 +138,7 @@ public class ControleInicial implements IControleInicial {
             observador.erroGeracaoRede(ex);
         });
     }
+    
 
     @Override
     /**

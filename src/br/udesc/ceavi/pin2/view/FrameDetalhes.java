@@ -4,18 +4,21 @@ import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 import br.udesc.ceavi.pin2.control.ControleDetalhes;
 import br.udesc.ceavi.pin2.control.IControleDetalhes;
 import br.udesc.ceavi.pin2.control.IControleSimulacao;
+import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
+import br.udesc.ceavi.pin2.control.traci.Veiculo;
+import br.udesc.ceavi.pin2.exceptions.LogException;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
-import javax.swing.JInternalFrame;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
  * Frame com os detalhes da simulação.
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
-public class FrameDetalhes extends JInternalFrame {
+public class FrameDetalhes extends JFrame implements ObservadorSimulacao{
     
     private IControleDetalhes controller;
     private JPanel            painelDetalhes;
@@ -49,7 +52,7 @@ public class FrameDetalhes extends JInternalFrame {
     public void carregaTelaDetalhes(){
         this.setSize(new Dimension(600, 400));
         this.getContentPane().removeAll();
-       // this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);
         this.setContentPane(this.iniciaPainelDetalhes());
     }
 
@@ -63,19 +66,7 @@ public class FrameDetalhes extends JInternalFrame {
         this.painelDetalhes.setBorder(BorderFactory.createLineBorder(SimulacaoMicroscopica.COR_BORDA, 2));
         this.painelDetalhes.setLayout(new BorderLayout(0, 0));
         this.painelDados = new PainelDados();
-        // TODO REMOVER
-        this.painelDados.adicionaDados("Teste1", "Teste<br/><ul><li>Teste</li><li>Teste</li></ul>");
-        this.painelDados.adicionaDados("Teste2", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
-        this.painelDados.adicionaDados("Teste3", "Teste<br/>Teste<br/>Teste");
+        this.painelDados.adicionaDados("Etapa", "Iniciada Simulação.");
         this.painelAcoes = new PainelAcoes();
         this.painelDetalhes.add(painelDados, BorderLayout.CENTER);
         this.painelDetalhes.add(painelAcoes, BorderLayout.SOUTH);
@@ -88,6 +79,32 @@ public class FrameDetalhes extends JInternalFrame {
      */
     public void carregaDetalhes(IControleSimulacao controller){
         this.controller.setControlerSimulacao(controller);
+        this.controller.getControllerSimulacao().anexaObservador(this);
     }
+
+    public void ocultaDetalhes() {
+        this.controller.getControllerSimulacao().desanexaObservador(this);
+        this.controller.setControlerSimulacao(null);
+    }
+
+    @Override
+    public void erroExecucaoSimulacao(LogException ex) {}
+
+    @Override
+    public void sucessoExecucaoSimulacao(){}
+
+    @Override
+    public void entradaTraCI(String entrada) {
+        SwingUtilities.invokeLater(() -> {
+            this.painelDados.adicionaDados("Entrada TraCI: ", entrada);
+            this.revalidate();
+        });
+    }
+
+    @Override
+    public void logTraCI(String entrada) {}
+
+    @Override
+    public void novoVeiculo(Veiculo veiculo) {}
     
 }

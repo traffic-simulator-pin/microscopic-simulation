@@ -5,7 +5,7 @@ import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
 /**
  * Classe para excessões quais geram log de dados. Ao capturar esta excessão, gere o log para o arquivo utilizando do
  * método "generateLog".
- * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schmitz
  */
 public abstract class LogException extends Exception{
     
