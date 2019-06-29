@@ -1,0 +1,63 @@
+package br.udesc.ceavi.pin2.view;
+
+import br.udesc.ceavi.pin2.SimulacaoMicroscopica;
+import br.udesc.ceavi.pin2.control.ObservadorSimulacao;
+import java.awt.Dimension;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+/**
+ * Tela Principal da aplicação.
+ * @author Bruno Galeazzi Rech, Gustavo Jung, Igor Martins, Jeferson Penz, João Pedro Schimitz
+ */
+public class FramePrincipal extends JInternalFrame implements ObservadorSimulacao {
+
+    /**
+     * Cria uma nova tela principal para a aplicação.
+     */
+    public FramePrincipal() {
+        super(SimulacaoMicroscopica.NOME_APLICACAO);
+        SwingUtilities.invokeLater(() -> {
+            this.iniciaPropriedadesJanela();
+        });
+    }
+    
+    /**
+     * Inicia as propriedades da janela.
+     */
+    private void iniciaPropriedadesJanela(){
+        this.setBackground(SimulacaoMicroscopica.COR_FUNDO);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setResizable(false);
+    }
+    
+    /**
+     * Carrega a tela inicial de simulação.
+     */
+    public void carregaTelaInicialSimulacao(){
+        this.setVisible(false);
+        this.setSize(new Dimension(400, 300));
+        this.getContentPane().removeAll();
+       // this.setLocationRelativeTo(null);
+        JPanel painelBase = new PainelInicial();
+        this.setContentPane(painelBase);
+        this.setVisible(true);
+        SimulacaoMicroscopica.getInstance().log("Criada tela inicial da aplicação.");
+    }
+    
+    /**
+     * Carrega a tela de execução da simulação.
+     */
+    public void carregaTelaExecucaoSimulacao(){
+        this.setVisible(false);
+        this.setSize(new Dimension(600, 400));
+        this.getContentPane().removeAll();
+       // this.setLocationRelativeTo(null);
+        JPanel painelBase = new PainelSimulacao();
+        this.setContentPane(painelBase);
+        this.setVisible(true);
+        SimulacaoMicroscopica.getInstance().log("Criada tela de execução da aplicação.");
+    }
+    
+}
